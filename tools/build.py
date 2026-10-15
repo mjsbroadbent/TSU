@@ -622,7 +622,11 @@ def record_page(m):
     rows = [("Title", e(m["title"]) + (f' (<i>{e(m["subtitle"])}</i>)' if m.get("subtitle") else "")), ("Author", e(m["author"]))]
     if m.get("translator"): rows.append(("Translator", e(m["translator"])))
     if m.get("part_of"): rows.append(("Part of", f'<i>{e(m["part_of"])}</i>' + (f', no. {m["part_no"]}' if m.get("part_no") else "")))
-    if m.get("publisher"): rows.append(("Publisher", e(m["publisher"])))
+    if m.get("publisher"):
+        pub = e(m["publisher"])
+        if m.get("publisher_url"):
+            pub = f'<a href="{e(m["publisher_url"])}" rel="noopener">{pub}</a>'
+        rows.append(("Publisher", pub))
     if m.get("published"): rows.append(("Published", e(m["published"])))
     rows += [("Form", e(m["form"])), ("Written", e(m["written"])), ("Language", e(m["language"])),
              ("Extent", f'{m["pages"]} pages · about {round(words, -2):,} words'), ("Subjects", e("; ".join(m["subjects"]))),
