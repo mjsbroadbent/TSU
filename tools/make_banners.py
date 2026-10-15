@@ -54,10 +54,8 @@ def rrect(d, box, r, fill):
 
 
 def logo(canvas, xy, h=70, white=False):
-    m = Image.open(SRC / "logo-mark.png").convert("RGBA")
+    m = Image.open(SRC / "seal.png").convert("RGBA")
     m = m.resize((round(m.width * h / m.height), h), Image.LANCZOS)
-    if white:  # mark on a white tile, white lettering
-        ImageDraw.Draw(canvas).rounded_rectangle((xy[0] - 8, xy[1] - 6, xy[0] + m.width + 8, xy[1] + h + 6), radius=8, fill="white")
     canvas.paste(m, xy, m)
     d = ImageDraw.Draw(canvas)
     col = (255, 255, 255) if white else NAVY

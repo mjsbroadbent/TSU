@@ -96,14 +96,14 @@ def page(title, body, *, base, active="", who="", description="", body_class="",
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{e(title)}</title>
 <meta name="description" content="{e(description or 'Talas State University (TSU), the oldest and largest university in Irad, founded in 1958.')}">
-<link rel="icon" href="{base}assets/logo-mark.svg" type="image/svg+xml">
+<link rel="icon" href="{base}assets/seal.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="{base}assets/tsu.css">
 </head>
 <body class="{body_class}" data-base="{base}">
 <header class="top">
-  <a class="top-logo" href="{base}"><img src="{base}assets/logo-mark.svg" alt=""><span>Talas State<br>University</span></a>
+  <a class="top-logo" href="{base}"><img src="{base}assets/seal.svg" alt=""><span>Talas State<br>University</span></a>
   <button class="burger top-tools" type="button" aria-label="Menu" style="display:none;border:0;background:none;align-items:center;padding:0 12px;font-size:22px;color:#25518e;cursor:pointer">&#9776;</button>
   <ul class="menu">{''.join(menu)}</ul>
   <div class="top-tools">
@@ -117,7 +117,7 @@ def page(title, body, *, base, active="", who="", description="", body_class="",
   <p class="side-h">Information for:</p>
   <ul class="who">{who_links}</ul>
   <div class="side-foot">
-    <a class="side-logo" href="{base}"><img src="{base}assets/logo-mark.svg" alt=""><b>Talas State<br>University</b></a>
+    <a class="side-logo" href="{base}"><img src="{base}assets/seal.svg" alt=""><b>Talas State<br>University</b></a>
     <div class="soc"><a class="tp" href="https://mjsbroadbent.github.io/tulpar/" title="TSU on Tulpar" rel="noopener">T</a><a href="https://iradone.com/" title="TSU on IradOne" rel="noopener">1</a><a href="mailto:info@tsu.edu.ir.ad" title="E-mail">@</a></div>
     <ul class="side-links">
       <li><a href="{base}about/">Talas State University</a></li>
@@ -414,7 +414,9 @@ def about_pages():
 <h2>Talas State University</h2>
 <p><b>Talas State University</b> (TSU; Iradi: <i>Talas Mamlekettik Universiteti</i>) is the oldest and largest university in Irad. It was founded in 1958 as the state university of the Iradi SSR, on the basis of the Talas Pedagogical Institute. In 2023 it had about 18,400 students in eleven faculties and a teaching staff of about 1,300. Its publishing house, <a href="{b}library/press/">Talas State University Press</a>, is the main publisher of scholarly work on Irad.</p>
 <table><tr><th>Founded</th><td>1958</td></tr><tr><th>Status</th><td>State university of the Irad Special Economic Zone</td></tr><tr><th>Students</th><td>about 18,400 (2023), of them 1,900 in master's and doctoral programmes</td></tr><tr><th>Teaching staff</th><td>about 1,300</td></tr><tr><th>Faculties</th><td><a href="{b}faculties/">11</a></td></tr><tr><th>Languages of instruction</th><td>Iradi and English; Russian as an elective</td></tr><tr><th>Campus</th><td>Main building and eight teaching buildings on University Street, Talas; TSU Stadium; teaching stables; the Manas Peak field station</td></tr></table>
-<h2 id="elders">Council of Elders</h2>
+<h2 id="seal">The university seal</h2>
+<p><img src="{b}assets/seal.svg" alt="Seal of Talas State University" style="float:right;width:190px;height:190px;margin:0 0 12px 20px">The seal shows the three peaks of the Talas Alatau under the eight-pointed star of Irad, an open book, and a wreath of wheat for the Faculty of Agriculture, one of the three founding faculties. The ribbon carries the motto <i>Bilim jaryk</i> ("Knowledge is light") above the founding year, 1958. The ring reads <i>Talas Mamlekettik Universiteti</i> above and <i>Talas State University</i> below. The present design dates from 1994, when the Soviet-era emblem with its hammer and sickle was replaced; the Iradi inscription was added in the Latin alphabet.</p>
+<h2 id="elders" style="clear:both">Council of Elders</h2>
 <p>The <i>Aksakaldar keneshi</i> brings together retired professors and honorary doctors of the university. It advises the rector on the university's traditions, ceremonies and honorary degrees and keeps the university museum in the main building.</p>
 <h2 id="quality">Quality assurance</h2>
 <p>All bachelor's programmes are accredited by the ISEZ Education Quality Agency. Programmes in medicine, law and economics also hold accreditation from partner agencies abroad. Students evaluate every course anonymously at the end of each semester through the student e-portal.</p>
