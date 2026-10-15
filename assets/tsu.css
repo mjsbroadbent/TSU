@@ -91,10 +91,11 @@ main { margin-left: var(--side); padding-top: var(--head); min-height: 100vh; }
 .muted { color: var(--ink-3); }
 
 /* ---------- hero slider ---------- */
-.hero { position: relative; height: 440px; overflow: hidden; background: #ddd; }
+.hero { position: relative; aspect-ratio: 1600 / 868; max-height: 560px; overflow: hidden; background: #ddd; }
 .slide { position: absolute; inset: 0; opacity: 0; transition: opacity .8s; }
 .slide.on { opacity: 1; }
 .slide img { width: 100%; height: 100%; object-fit: cover; }
+a.slide { display: block; }
 .slide-cap { position: absolute; left: 40px; bottom: 56px; max-width: 560px; background: rgba(255,255,255,.94); border-radius: 10px; padding: 20px 24px; }
 .slide-cap h2 { font-size: 26px; margin-bottom: 6px; color: var(--navy); }
 .slide-cap p { margin: 0 0 12px; color: var(--ink-2); }
@@ -137,6 +138,7 @@ main { margin-left: var(--side); padding-top: var(--head); min-height: 100vh; }
 .mag-cover i { font-style: normal; font-weight: 600; font-size: 13px; margin-top: 4px; opacity: .9; }
 .mag-cover em { font-style: normal; margin-top: auto; font-size: 12px; line-height: 1.35; opacity: .95; }
 .mag-cover::after { content: ""; position: absolute; right: -40px; top: 40%; width: 160px; height: 160px; border: 22px solid rgba(255,255,255,.08); border-radius: 50%; }
+.mag-img { width: 100%; aspect-ratio: 3/4; object-fit: cover; }
 .mag .b { padding: 12px 14px; font-weight: 600; font-size: 14px; }
 
 /* ---------- applicant guide ---------- */
@@ -335,7 +337,7 @@ body.reading .progress { left: 0; }
   .news-grid, .progs, .disc, .useful, .stats, .inner, .alum, .foot .wrap { grid-template-columns: 1fr; }
   .news-grid .ev { grid-column: auto; }
   .guide { grid-template-columns: 1fr; }
-  .hero { height: 340px; }
+  .hero { height: auto; }
   .slide-cap { left: 16px; right: 16px; bottom: 44px; }
   .slide-cap h2 { font-size: 20px; }
   .wrap { padding: 0 16px; }

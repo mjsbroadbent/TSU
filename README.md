@@ -19,6 +19,7 @@ python3 tools/build.py
 | `img/` | Campus photos, AI-generated. `main_building.jpg` is the wiki's photo of the main building (the canon look: 1960s grey stone, columned glass entrance, horsemen mosaic); `students.jpg` and `graduation.jpg` were made from it with FLUX.2 Klein as reference; the rest are FLUX.1 Krea renders. Lettering blurred |
 | `data/press.json` | The TSU Press catalogue: every TSU Press title cited in the Irad wiki (regenerate from the wiki if new titles appear) |
 | `library/works/<slug>/` | One folder per Digital Archive work: `meta.json`, `text.md`, the PDF |
+| `tools/make_banners.py` | Composes the home-page slider banners (text baked in, cut-out stock people, diagonal shapes, fake QR code), the journal collage covers and the news photos from `img/src/` (FLUX renders). Deliberately a little rough, like a university press office's own design |
 | `tools/pdf_to_work.py` | Turns a typeset PDF of a single piece into `text.md` for the reader |
 | `tools/pdf_to_book.py` | Turns a typeset book PDF (cover, contents page, running heads) into `book.json`: one reader page per section, italics kept |
 

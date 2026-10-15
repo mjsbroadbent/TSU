@@ -223,7 +223,7 @@ NEWS = [
          body=["The Scientific Library of Talas State University has opened a Digital Archive for long-form works that are hard to find in print: literary works, memoirs, theses and the reports of the university's institutes. Every item can be read online in the library's reader or downloaded as a PDF.",
                "The first works in the archive are Aikokul Tursunbek kyzy's <a href=\"../../library/archive/twelve-kilometres/\"><i>Twelve Kilometres</i></a> (<i>On Eki Chakyrym</i>), twelve stories and a coda from the partition years of 2006–2009, published by Arsha Books in Iradi in 2015 and in Aidana Mukash kyzy's English translation in 2016, and the author's <a href=\"../../library/archive/bazaar-chubar/\">revised and expanded “Bazaar Chubar”</a> (2019), the story of a walnut buyer's daughter in Bazar-Korgon in the autumn of 2007.",
                "“A university library should keep what its own country writes about itself,” said the director of the library. Authors and families who wish to deposit a work may write to library@tsu.edu.ir.ad."]),
-    dict(slug="rabat-i-safed-coins", date="2026-10-10", img="img/archive.jpg", tag="Research",
+    dict(slug="rabat-i-safed-coins", date="2026-10-10", img="img/news_lab_staff.jpg", tag="Research",
          title="Rabat-i-Safed coins go to Nurzhan for testing",
          lead="Kara-Khanid coins found by the university's expedition will be analysed at the Nurzhan Polytechnic Institute before publication.",
          body=["The group of worn 10th- and 11th-century Kara-Khanid coins found in September at the caravanserai of Rabat-i-Safed will be sent to the materials laboratory of the Nurzhan Polytechnic Institute to establish what they are made of. Dr Marat Imanaliev, who led the season, said early tests suggest a very high lead content.",
@@ -235,12 +235,12 @@ NEWS = [
          body=["Enrolment is open for the autumn intake of the university's evening courses for adults. Classes run from 18:30 to 20:30 on weekdays in Building 3, from 9 November to 12 February.",
                "Courses: accounting and taxes; English, levels A1 to B2; computer literacy. Fee: IS 4,800 for the course. Applications at Building 3, room 104, or by telephone 2-31-40-17.",
                "See <a href=\"../../admission/evening/\">Evening courses</a>."]),
-    dict(slug="komuz-contest-qualifying", date="2026-10-08", img="img/main_building.jpg", tag="Culture",
+    dict(slug="komuz-contest-qualifying", date="2026-10-08", img="img/news_komuz.jpg", tag="Culture",
          title="Faculty of Arts and Music hosts komuz contest qualifying on 22 October",
          lead="Players in three age groups will play in the faculty's concert hall; the gala is on 24 October.",
          body=["The qualifying round of the national komuz contest will take place on 22 October in the concert hall of the Faculty of Arts and Music. Every entrant plays one küü from Aigul Choro kyzy's published transcriptions and one piece of free choice.",
                "The winners perform at the gala on Saturday 24 October, shown the same evening by IradOne. Students of the faculty will act as accompanists and stewards."]),
-    dict(slug="first-year-2026", date="2026-09-01", img="img/graduation.jpg", tag="University",
+    dict(slug="first-year-2026", date="2026-09-01", img="img/news_dedication.jpg", tag="University",
          title="4,120 first-year students begin the 2026–27 academic year",
          lead="The rector opened the year on the steps of the main building; 1,350 students study on state grants.",
          body=["Talas State University welcomed 4,120 first-year students on 1 September, 1,350 of them on state grants. The largest intakes were in economics, medicine and computer science.",
@@ -331,12 +331,13 @@ def by_line(m, sub=True):
 
 def home():
     b = ""
-    slides = [("img/main_building.jpg", "Talas State University", "The oldest and largest university in Irad: eleven faculties, 18,400 students, since 1958.", "about/", "About the university"),
-              ("img/reading_room.jpg", "The Digital Archive is open", "Read Aikokul Tursunbek kyzy's Twelve Kilometres and other long-form works online.", "library/archive/", "Go to the archive"),
-              ("img/students.jpg", "Evening courses for adults", "Accounting, English and computer literacy. Enrolment until 1 November.", "admission/evening/", "Enrol"),
-              ("img/glacier.jpg", "Science on the roof of Irad", "TSU glaciologists measure the glaciers of the Talas Alatau and the Manas massif.", "research/#glaciology", "Research at TSU")]
-    sl = "".join(f'<div class="slide{" on" if i == 0 else ""}"><img src="{b}{img}" alt=""><div class="slide-cap"><h2>{e(t)}</h2><p>{e(p)}</p>'
-                 f'<a class="btn" href="{b}{h}">{e(bt)} &#8599;</a></div></div>' for i, (img, t, p, h, bt) in enumerate(slides))
+    slides = [("img/banner_admission.jpg", "admission/", "Talas State University Admissions Office 2027"),
+              ("img/banner_archive.jpg", "library/archive/twelve-kilometres/", "Digital Archive: read Twelve Kilometres online"),
+              ("img/banner_evening.jpg", "admission/evening/", "Evening courses for adults: enrolment until 1 November"),
+              ("img/banner_council.jpg", "students/", "Student Council elections, 20 October 2026"),
+              ("img/banner_dorm.jpg", "students/#dorms", "Dormitory help centre 24/7"),
+              ("img/main_building.jpg", "about/", "Talas State University")]
+    sl = "".join(f'<a class="slide{" on" if i == 0 else ""}" href="{b}{h}"><img src="{b}{im}" alt="{e(alt)}"></a>' for i, (im, h, alt) in enumerate(slides))
     hero = f'<section class="hero">{sl}<div class="dots"></div></section>'
     svc = [("TSU Portal", "students/#portal", "timetable, grades"), ("e-Library", "library/", "catalogue"), ("Digital archive", "library/archive/", "read online"),
            ("TSU Press", "library/press/", "132 titles"), ("Dormitory", "students/#dorms", "applications"), ("Career centre", "students/#career", "vacancies"),
@@ -352,14 +353,13 @@ def home():
             f'<span class="news-tabs"><span class="on">All</span><span>Science</span><span>Library</span><span>Students</span></span></h2>'
             f'<div class="news-grid"><div class="news-col">{nc(n[0], True)}</div><div class="news-col">{nc(n[1])}{nc(n[2])}{nc(n[3])}</div>'
             f'<div class="ev"><h3><a href="{b}news/">Events of the month</a> <span class="arr" style="color:#2a6ecb">&#8599;</span></h3>{ev}</div></div></section>')
-    mags = [("#20385f", "Bulletin", "History series", "No. 3 (2026)", "The 1916 revolt in the northern valleys: new sources"),
-            ("#5a2a4a", "Bulletin", "Philology series", "No. 2 (2026)", "Urban speech of Talas; a lexicon of walnut growers"),
-            ("#1f5145", "Bulletin", "Natural sciences", "No. 2 (2026)", "Snow leopard camera traps, Chatkal 2025"),
-            ("#3a3a3a", "TSU News", "University newspaper", "September 2026", "4,120 first-year students; the new library reader")]
+    mags = [("#20385f", "Bulletin: History series, No. 3 (2026)", "", "", "The 1916 revolt in the northern valleys: new sources"),
+            ("#5a2a4a", "Bulletin: Philology series, No. 2 (2026)", "", "", "Urban speech of Talas; a lexicon of walnut growers"),
+            ("#1f5145", "Bulletin: Natural sciences, No. 2 (2026)", "", "", "Snow leopard camera traps, Chatkal 2025"),
+            ("#3a3a3a", "TSU News: September 2026", "", "", "4,120 first-year students; the new library reader")]
     magz = (f'<section class="sec wrap">{sec_t("Journals and newspapers", "research/#bulletin")}<div class="mags">'
-            + "".join(f'<a class="card mag" href="{b}research/#bulletin"><div class="mag-cover" style="background:{c}"><small>Talas State<br>University</small>'
-                      f'<b>{e(t)}</b><i>{e(s)}</i><em>{e(no)}<br>{e(d)}</em></div><div class="b">{e(t)}: {e(s)}, {e(no)}</div></a>' for c, t, s, no, d in mags)
-            + "</div></section>")
+            + "".join(f'<a class="card mag" href="{b}research/#bulletin"><img class="mag-img" src="{b}img/mag_{k + 1}.jpg" alt="" loading="lazy"><div class="b">{e(t)}</div></a>'
+                      for k, (c, t, s_, no, d) in enumerate(mags)) + "</div></section>")
     g = [("briefcase", "Programmes in demand: medicine, computer science, economics and law"), ("medal", "1,350 state grants for first-year students each year"),
          ("lang", "Study in Iradi and English, with Russian as an elective"), ("chart", "Credit system: build your own study plan"),
          ("globe", "Exchanges with partner universities in the United States, Turkey and Korea"), ("mountain", "Field practice from the Kyzylkum fringe to the Manas glaciers")]
