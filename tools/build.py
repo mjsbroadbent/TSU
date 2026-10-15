@@ -218,10 +218,10 @@ FACULTIES = [
 
 NEWS = [
     dict(slug="digital-archive-bazaar-chubar", date="2026-10-15", img="img/reading_room.jpg", tag="Library",
-         title="Digital archive opens with Aikokul Tursunbek kyzy's “Bazaar Chubar”",
-         lead="The Scientific Library has opened its Digital Archive to readers, beginning with a long story of the Fergana rim in 2007.",
+         title="Digital archive opens with Aikokul Tursunbek kyzy's “Twelve Kilometres”",
+         lead="The Scientific Library has opened its Digital Archive to readers, beginning with Aikokul Tursunbek kyzy's stories of the partition years.",
          body=["The Scientific Library of Talas State University has opened a Digital Archive for long-form works that are hard to find in print: literary works, memoirs, theses and the reports of the university's institutes. Every item can be read online in the library's reader or downloaded as a PDF.",
-               "The first work in the archive is <a href=\"../../library/archive/bazaar-chubar/\">“Bazaar Chubar”</a> by Aikokul Tursunbek kyzy, from her cycle <i>On Eki Chakyrym</i> (Twelve Kilometres). Written between 2014 and 2019 in Bazar-Korgon and Talas, the story follows a walnut buyer's daughter in Bazar-Korgon in the summer and autumn of 2007, when the ceasefire line was drawn along the foot of the hills.",
+               "The first works in the archive are Aikokul Tursunbek kyzy's <a href=\"../../library/archive/twelve-kilometres/\"><i>Twelve Kilometres</i></a> (<i>On Eki Chakyrym</i>), twelve stories and a coda from the partition years of 2006–2009, published by Arsha Books in Iradi in 2015 and in Aidana Mukash kyzy's English translation in 2016, and the author's <a href=\"../../library/archive/bazaar-chubar/\">revised and expanded “Bazaar Chubar”</a> (2019), the story of a walnut buyer's daughter in Bazar-Korgon in the autumn of 2007.",
                "“A university library should keep what its own country writes about itself,” said the director of the library. Authors and families who wish to deposit a work may write to library@tsu.edu.ir.ad."]),
     dict(slug="rabat-i-safed-coins", date="2026-10-10", img="img/archive.jpg", tag="Research",
          title="Rabat-i-Safed coins go to Nurzhan for testing",
@@ -268,6 +268,7 @@ def load_works():
         if (d / "meta.json").exists():
             m = json.loads((d / "meta.json").read_text(encoding="utf-8"))
             m["dir"] = d
+            m["book"] = json.loads((d / "book.json").read_text(encoding="utf-8")) if (d / "book.json").exists() else None
             out.append(m)
     out.sort(key=lambda m: m.get("added", ""), reverse=True)
     return out
@@ -297,13 +298,33 @@ def render_text(md: str):
 
 
 def citation(m):
-    return (f'{e(m["author_sort"])}. “{e(m["title"])}.” In <i>{e(m["part_of"])}</i>. '
-            f'Talas State University Scientific Library, Digital Archive, {e(m["accession"])}. '
-            f'https://tsu.edu.ir.ad/library/archive/{e(m["slug"])}/')
+    url = f'https://tsu.edu.ir.ad/library/archive/{e(m["slug"])}/'
+    if m.get("book"):
+        year = re.findall(r"\d{4}", m.get("published", ""))
+        tr = f' Translated by {e(m["translator"])}.' if m.get("translator") else ""
+        sub = f' ({e(m["subtitle"])})' if m.get("subtitle") else ""
+        return (f'{e(m["author_sort"])}. <i>{e(m["title"])}{sub}</i>.{tr} {e(m.get("publisher", ""))}, {year[-1] if year else ""}. '
+                f'Talas State University Scientific Library, Digital Archive, {e(m["accession"])}. {url}')
+    part = f' In <i>{e(m["part_of"])}</i>.' if m.get("part_of") else ""
+    return (f'{e(m["author_sort"])}. \u201c{e(m["title"])}.\u201d{part} '
+            f'Talas State University Scientific Library, Digital Archive, {e(m["accession"])}. {url}')
 
 
-def w_cover(m):
+def w_cover(m, base=""):
+    if m.get("cover"):
+        return f'<div class="w-cover w-img"><img src="{base}library/works/{m["slug"]}/{m["cover"]}" alt="Cover of {e(m["title"])}" loading="lazy"></div>'
     return f'<div class="w-cover"><b>{e(m["title"])}</b><i>{e(m["author"])}</i></div>'
+
+
+def by_line(m, sub=True):
+    t = e(m["author"])
+    if m.get("translator"):
+        t += f' · translated by {e(m["translator"])}'
+    if m.get("part_of"):
+        t += f' · from <i>{e(m["part_of"])}</i>'
+    elif m.get("subtitle") and sub:
+        t += f' · <i>{e(m["subtitle"])}</i>'
+    return t
 
 
 # ---------------------------------------------------------------- pages
@@ -311,7 +332,7 @@ def w_cover(m):
 def home():
     b = ""
     slides = [("img/main_building.jpg", "Talas State University", "The oldest and largest university in Irad: eleven faculties, 18,400 students, since 1958.", "about/", "About the university"),
-              ("img/reading_room.jpg", "The Digital Archive is open", "Read long-form works online: the first is Aikokul Tursunbek kyzy's “Bazaar Chubar”.", "library/archive/", "Go to the archive"),
+              ("img/reading_room.jpg", "The Digital Archive is open", "Read Aikokul Tursunbek kyzy's Twelve Kilometres and other long-form works online.", "library/archive/", "Go to the archive"),
               ("img/students.jpg", "Evening courses for adults", "Accounting, English and computer literacy. Enrolment until 1 November.", "admission/evening/", "Enrol"),
               ("img/glacier.jpg", "Science on the roof of Irad", "TSU glaciologists measure the glaciers of the Talas Alatau and the Manas massif.", "research/#glaciology", "Research at TSU")]
     sl = "".join(f'<div class="slide{" on" if i == 0 else ""}"><img src="{b}{img}" alt=""><div class="slide-cap"><h2>{e(t)}</h2><p>{e(p)}</p>'
@@ -586,45 +607,125 @@ def library_pages(works, press):
 
 
 def work_row(m, base):
-    return (f'<a class="card work" href="{base}library/archive/{m["slug"]}/" data-c="{e(m["collection"])}" data-s="{e((m["title"] + " " + m["author"] + " " + " ".join(m["subjects"])).lower())}">{w_cover(m)}'
-            f'<div><span class="tag">{e(m["form"])} · {e(m["collection"])}</span><h3>{e(m["title"])}</h3><div class="by">{e(m["author"])} · from <i>{e(m["part_of"])}</i></div>'
+    return (f'<a class="card work" href="{base}library/archive/{m["slug"]}/" data-c="{e(m["collection"])}" data-s="{e((m["title"] + " " + m["author"] + " " + m.get("translator", "") + " " + " ".join(m["subjects"])).lower())}">{w_cover(m, base)}'
+            f'<div><span class="tag">{e(m["form"])} · {e(m["collection"])}</span><h3>{e(m["title"])}</h3><div class="by">{by_line(m)}</div>'
             f'<p>{e(m["abstract"][:210].rsplit(" ", 1)[0])}…</p></div><div class="meta">{m["pages"]} pp. · PDF<br>Added {fmt_date(m["added"])}</div></a>')
 
 
 def record_page(m):
     b = "../../../"
     pdf_kb = round((m["dir"] / m["pdf"]).stat().st_size / 1024)
-    words = len((m["dir"] / "text.md").read_text(encoding="utf-8").split())
+    if m.get("book"):
+        words = sum(len(re.sub("<[^>]+>", "", x.get("html", "")).split()) for sec in m["book"]["sections"] for x in sec["blocks"])
+    else:
+        words = len((m["dir"] / "text.md").read_text(encoding="utf-8").split())
+    rows = [("Title", e(m["title"]) + (f' (<i>{e(m["subtitle"])}</i>)' if m.get("subtitle") else "")), ("Author", e(m["author"]))]
+    if m.get("translator"): rows.append(("Translator", e(m["translator"])))
+    if m.get("part_of"): rows.append(("Part of", f'<i>{e(m["part_of"])}</i>' + (f', no. {m["part_no"]}' if m.get("part_no") else "")))
+    if m.get("publisher"): rows.append(("Publisher", e(m["publisher"])))
+    if m.get("published"): rows.append(("Published", e(m["published"])))
+    rows += [("Form", e(m["form"])), ("Written", e(m["written"])), ("Language", e(m["language"])),
+             ("Extent", f'{m["pages"]} pages · about {round(words, -2):,} words'), ("Subjects", e("; ".join(m["subjects"]))),
+             ("Collection", e(m["collection"])), ("Accession no.", e(m["accession"]))]
+    if m.get("legal_deposit"): rows.append(("Legal deposit", e(m["legal_deposit"])))
+    rows += [("Added", fmt_date(m["added"])), ("Rights", e(m["rights"]))]
+    contents = ""
+    if m.get("book"):
+        items = "".join(f'<li><a href="read/{sec["id"]}/">' + (f'<span class="lbl">{e(sec["label"])}</span>' if sec["label"] else '<span class="lbl"></span>')
+                        + f'{e(sec["title"])}</a>' + (f'<small>{e(sec["subtitle"])}</small>' if sec["subtitle"] else "") + "</li>" for sec in m["book"]["sections"])
+        contents = f'<h2>Contents</h2><ol class="contents">{items}</ol>'
+    related = ""
+    for r in m.get("related", []):
+        related += f'<div class="note"><a href="../{r["slug"]}/">{e(r["note"])}</a></div>'
     main = f"""
-<div class="rec-head">{w_cover(m).replace('class="w-cover"', 'class="w-cover" style="font-size:16px"')}
-<div><p class="tag">{e(m["form"])} · {e(m["collection"])}</p><h2 style="margin:8px 0 4px;font-size:26px">{e(m["title"])}</h2><p style="margin:0 0 14px;font-size:16px">{e(m["author"])}</p>
+<div class="rec-head">{w_cover(m, b).replace('class="w-cover"', 'class="w-cover" style="font-size:16px"')}
+<div><p class="tag">{e(m["form"])} · {e(m["collection"])}</p><h2 style="margin:8px 0 4px;font-size:26px">{e(m["title"])}</h2>{f'<p style="margin:0;font-style:italic">{e(m["subtitle"])}</p>' if m.get("subtitle") else ""}<p style="margin:4px 0 14px;font-size:16px">{by_line(m, sub=False)}</p>
 <p style="display:flex;gap:10px;flex-wrap:wrap"><a class="btn" href="read/">Read online</a><a class="btn btn-o" href="{b}library/works/{m["slug"]}/{m["pdf"]}" download>Download PDF ({pdf_kb} KB)</a></p></div></div>
+{related}
 <h2>Abstract</h2><p>{e(m["abstract"])}</p>
+{contents}
 <h2>Record</h2>
-<table class="rec"><tr><th>Title</th><td>{e(m["title"])}</td></tr><tr><th>Author</th><td>{e(m["author"])}</td></tr>
-<tr><th>Part of</th><td><i>{e(m["part_of"])}</i>, no. {m["part_no"]}</td></tr><tr><th>Form</th><td>{e(m["form"])}</td></tr>
-<tr><th>Written</th><td>{e(m["written"])}</td></tr><tr><th>Language</th><td>{e(m["language"])}</td></tr>
-<tr><th>Extent</th><td>{m["pages"]} pages · about {round(words, -2):,} words</td></tr><tr><th>Subjects</th><td>{e("; ".join(m["subjects"]))}</td></tr>
-<tr><th>Collection</th><td>{e(m["collection"])}</td></tr><tr><th>Accession no.</th><td>{e(m["accession"])}</td></tr>
-<tr><th>Added</th><td>{fmt_date(m["added"])}</td></tr><tr><th>Rights</th><td>{e(m["rights"])}</td></tr></table>
+<table class="rec">{''.join(f'<tr><th>{k}</th><td>{v}</td></tr>' for k, v in rows)}</table>
 <h2>How to cite</h2><p class="cite">{citation(m)}</p>"""
     sub = ("Digital archive", [("All works", "library/archive/"), ("Read online", f'library/archive/{m["slug"]}/read/'), ("Scientific library", "library/"), ("Deposit a work", "library/#deposit")])
     write(f'library/archive/{m["slug"]}/index.html',
           page(f'{m["title"]} | Digital archive | Talas State University', inner(b, [("Library", "library/"), ("Digital archive", "library/archive/")], m["title"], main, sub), base=b, active="library/", description=m["abstract"][:200]))
 
 
+def render_blocks(blocks):
+    out = []
+    for x in blocks:
+        k = x["k"]
+        if k == "brk":
+            out.append('<p class="brk" aria-hidden="true">⁂</p>')
+        elif k == "p":
+            out.append(f'<p>{x["html"]}</p>')
+        elif k == "quote":
+            out.append(f'<blockquote class="bq">{x["html"]}</blockquote>')
+        elif k == "h3" or (k == "center" and "<" not in x["html"] and len(x["html"]) < 40):
+            out.append(f'<h3 class="sub-h">{x["html"]}</h3>')
+        elif k == "right":
+            out.append(f'<p class="dl-line">{x["html"]}</p>')
+        else:
+            out.append(f'<p class="ctr">{x["html"]}</p>')
+    return "\n".join(out)
+
+
+def toc_nav(m, b, cur_id, back):
+    secs = m["book"]["sections"]
+    lis = "".join(f'<li><a href="{b}library/archive/{m["slug"]}/read/{sec["id"]}/"{" class=\"on\"" if sec["id"] == cur_id else ""}>'
+                  + (f'{e(sec["label"])}. ' if sec["label"].isdigit() else (f'{e(sec["label"])}: ' if sec["label"] else "")) + f'{e(sec["title"])}</a></li>' for sec in secs)
+    return (f'<nav class="toc"><a class="back" href="{back}">&larr; Record and download</a><h4>{e(m["title"])}</h4><div class="au">{e(m["author"])}</div>'
+            f'<div class="ctl"><button type="button" data-fs="-1" aria-label="Smaller text">A&minus;</button><button type="button" data-fs="1" aria-label="Larger text">A+</button><button type="button" data-side aria-label="Show or hide the menu">&#9776;</button></div>'
+            f'<ol><li><a href="{b}library/archive/{m["slug"]}/read/"{" class=\"on\"" if cur_id == "" else ""}>Title page and contents</a></li>{lis}</ol>'
+            f'<a class="dl" href="{b}library/works/{m["slug"]}/{m["pdf"]}" download>Download PDF</a></nav>')
+
+
+def book_reader(m):
+    secs = m["book"]["sections"]
+    b = "../../../../"
+    front = "".join(f'<div class="front">{x}</div>' for x in m["book"]["front"])
+    items = "".join(f'<li><a href="{sec["id"]}/"><span class="lbl">{e(sec["label"])}</span>{e(sec["title"])}</a>' + (f'<small>{e(sec["subtitle"])}</small>' if sec["subtitle"] else "") + "</li>" for sec in secs)
+    body = f"""<div class="progress"><i></i></div><div class="reader">{toc_nav(m, b, "", "../")}
+<div class="read-body"><article id="text"><header class="rt"><div class="au">{e(m["author"])}</div><h1>{e(m["title"])}</h1><div class="fr"><i>{e(m.get("subtitle", ""))}</i></div>
+<div class="fr" style="margin-top:18px">{e(m["form"])}</div>{f'<div class="fr"><i>Translated from the Iradi by {e(m["translator"])}</i></div>' if m.get("translator") else ""}<div class="fr" style="margin-top:18px">{e(m.get("publisher", ""))}</div></header>
+{front}<h2 style="margin-top:50px">Contents</h2><ol class="contents">{items}</ol>
+<p class="end"><a class="btn" href="{secs[0]["id"]}/">Start reading &rarr;</a></p></article></div></div>"""
+    write(f'library/archive/{m["slug"]}/read/index.html', page(f'{m["title"]}: read online | Talas State University', body, base=b, active="library/", body_class="reading"))
+    b2 = "../../../../../"
+    for i, sec in enumerate(secs):
+        prev_ = secs[i - 1] if i else None
+        next_ = secs[i + 1] if i + 1 < len(secs) else None
+        lab = ""
+        if sec["label"]:
+            lab = f'<div class="lab">{e(sec["label"]) if not sec["label"].isdigit() else NUMWORDS.get(int(sec["label"]), sec["label"])}</div>'
+        pn = '<nav class="pn">' + (f'<a href="../{prev_["id"]}/">&larr; {e(prev_["title"])}</a>' if prev_ else '<a href="../">&larr; Contents</a>') + \
+             (f'<a href="../{next_["id"]}/">{e(next_["title"])} &rarr;</a>' if next_ else '<a href="../../">Record &rarr;</a>') + "</nav>"
+        body = f"""<div class="progress"><i></i></div><div class="reader">{toc_nav(m, b2, sec["id"], "../../")}
+<div class="read-body"><article id="text"><header class="rt sec-open">{lab}<h1>{e(sec["title"])}</h1>{f'<div class="fr"><i>{e(sec["subtitle"])}</i></div>' if sec["subtitle"] else ""}</header>
+{render_blocks(sec["blocks"])}
+{pn}</article></div></div>"""
+        write(f'library/archive/{m["slug"]}/read/{sec["id"]}/index.html',
+              page(f'{sec["title"]} | {m["title"]} | Talas State University', body, base=b2, active="library/", body_class="reading"))
+
+
+NUMWORDS = {1: "One", 2: "Two", 3: "Three", 4: "Four", 5: "Five", 6: "Six", 7: "Seven", 8: "Eight", 9: "Nine", 10: "Ten", 11: "Eleven", 12: "Twelve"}
+
+
 def reader_page(m):
+    if m.get("book"):
+        return book_reader(m)
     b = "../../../../"
     text, toc = render_text((m["dir"] / "text.md").read_text(encoding="utf-8"))
     tocl = "".join(f'<li><a href="#{i}">{inline(h)}</a></li>' for i, h in toc)
-    part = m["part_of"]
+    part = m.get("part_of", "")
     pm = re.match(r"(.+?)\s*\((.+)\)$", part)
     part_html = f'{e(pm.group(1))} <i>({e(pm.group(2))})</i>' if pm else f"<i>{e(part)}</i>"
     body = f"""<div class="progress"><i></i></div>
 <div class="reader"><nav class="toc"><a class="back" href="../">&larr; Record and download</a><h4>{e(m["title"])}</h4><div class="au">{e(m["author"])}</div>
 <div class="ctl"><button type="button" data-fs="-1" aria-label="Smaller text">A&minus;</button><button type="button" data-fs="1" aria-label="Larger text">A+</button><button type="button" data-side aria-label="Show or hide the menu">&#9776;</button></div>
 <ol>{tocl}</ol><a class="dl" href="{b}library/works/{m["slug"]}/{m["pdf"]}" download>Download PDF</a></nav>
-<div class="read-body"><article id="text"><header class="rt"><h1>{e(m["title"])}</h1><div class="au">{e(m["author"])}</div><div class="fr"><i>from</i> {part_html}</div></header>
+<div class="read-body"><article id="text"><header class="rt"><h1>{e(m["title"])}</h1><div class="au">{e(m["author"])}</div>{f'<div class="fr"><i>from</i> {part_html}</div>' if part else ""}</header>
 {text}
 <p class="end">End of text · {e(m["accession"])} · <a href="../">Record</a></p></article></div></div>"""
     write(f'library/archive/{m["slug"]}/read/index.html',

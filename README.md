@@ -19,7 +19,8 @@ python3 tools/build.py
 | `img/` | Campus photos (FLUX.1 Krea renders, AI-generated; flag and stray lettering blurred) |
 | `data/press.json` | The TSU Press catalogue: every TSU Press title cited in the Irad wiki (regenerate from the wiki if new titles appear) |
 | `library/works/<slug>/` | One folder per Digital Archive work: `meta.json`, `text.md`, the PDF |
-| `tools/pdf_to_work.py` | Turns a typeset PDF into `text.md` for the reader |
+| `tools/pdf_to_work.py` | Turns a typeset PDF of a single piece into `text.md` for the reader |
+| `tools/pdf_to_book.py` | Turns a typeset book PDF (cover, contents page, running heads) into `book.json`: one reader page per section, italics kept |
 
 ## Library and Digital Archive
 
@@ -27,7 +28,11 @@ python3 tools/build.py
 
 Each work in the archive gets a record page (abstract, catalogue record, citation, PDF download) at `library/archive/<slug>/` and an online reader at `library/archive/<slug>/read/` (chapter list, text size, progress bar, remembers where you stopped).
 
-### Adding a work
+### Adding a book
+
+For a whole book (a PDF with a Contents page, like *Twelve Kilometres*): `python3 tools/pdf_to_book.py BOOK.pdf library/works/<slug>/book.json`, render the cover with `pdftoppm -f 1 -l 1 -r 80 -jpeg BOOK.pdf cover`, write `meta.json` (copy `twelve-kilometres/meta.json`: adds subtitle, translator, publisher, published, cover, legal_deposit, related) and rebuild. The reader gets a title page with dedication and epigraph, then one page per section with previous/next links.
+
+### Adding a single piece
 
 1. Make a folder `library/works/<slug>/` and put the PDF in it.
 2. `python3 tools/pdf_to_work.py library/works/<slug>/<file>.pdf library/works/<slug>/text.md --italic word word ...` (pdftotext loses italics; list the words to italicise). Check the text by eye.
@@ -35,7 +40,9 @@ Each work in the archive gets a record page (abstract, catalogue record, citatio
 3. Write `meta.json` (copy `bazaar-chubar/meta.json`): title, author, `author_sort`, `part_of`, `part_no`, form, collection, written, language, pages, pdf, accession, added, subjects, abstract, rights.
 4. `python3 tools/build.py`.
 
-Works so far: Aikokul Tursunbek kyzy, "Bazaar Chubar", from *On Eki Chakyrym* (Twelve Kilometres), no. 9.
+Works so far:
+- Aikokul Tursunbek kyzy, *Twelve Kilometres* (*On Eki Chakyrym*), stories, tr. Aidana Mukash kyzy (Arsha Books, Talas; Iradi 2015, English 2016). TSU-DA-2026-0146.
+- Aikokul Tursunbek kyzy, "Bazaar Chubar", the revised and expanded version of story 9 (Bazar-Korgon – Talas, 2014–2019). TSU-DA-2026-0147.
 
 ## Lore used
 
