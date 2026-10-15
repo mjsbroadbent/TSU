@@ -16,7 +16,7 @@ python3 tools/build.py
 |---|---|
 | `tools/build.py` | Builds every page (as `<dir>/index.html`). Menus, faculties, news and events are data at the top of the file |
 | `assets/` | `tsu.css`, `tsu.js`, `logo-mark.svg` (the shield: three peaks, open book, star) |
-| `img/` | Campus photos (FLUX.1 Krea renders, AI-generated; flag and stray lettering blurred) |
+| `img/` | Campus photos, AI-generated. `main_building.jpg` is the wiki's photo of the main building (the canon look: 1960s grey stone, columned glass entrance, horsemen mosaic); `students.jpg` and `graduation.jpg` were made from it with FLUX.2 Klein as reference; the rest are FLUX.1 Krea renders. Lettering blurred |
 | `data/press.json` | The TSU Press catalogue: every TSU Press title cited in the Irad wiki (regenerate from the wiki if new titles appear) |
 | `library/works/<slug>/` | One folder per Digital Archive work: `meta.json`, `text.md`, the PDF |
 | `tools/pdf_to_work.py` | Turns a typeset PDF of a single piece into `text.md` for the reader |
