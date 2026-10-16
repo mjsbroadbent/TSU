@@ -152,7 +152,41 @@ def page(title, body, *, base, active="", who="", description="", body_class="",
 """
 
 
+SITE = "https://mjsbroadbent.github.io/TSU/"
+DEFAULT_DESC = "Talas State University (TSU), the oldest and largest university in Irad, founded in 1958."
+SITEMAP = []
+
+
+def seo_head(rel: str, text: str) -> str:
+    """Canonical address, share tags and, where a page has only the default description,
+    one taken from its first paragraph. Records the page for sitemap.xml."""
+    url = SITE + (rel[:-len("index.html")] if rel.endswith("index.html") else rel)
+    if rel != "404.html":
+        SITEMAP.append(url)
+    m = re.search(r'<meta name="description" content="([^"]*)">', text)
+    desc = html.unescape(m.group(1)) if m else DEFAULT_DESC
+    if desc == DEFAULT_DESC and rel != "index.html":
+        main = text.split("<main>", 1)[-1].split("<footer", 1)[0]
+        for para in re.findall(r"<p[^>]*>(.*?)</p>", main, re.S):
+            t = re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", "", para))).strip()
+            if len(t) >= 80:
+                desc = t if len(t) <= 158 else t[:157].rsplit(" ", 1)[0] + "…"
+                break
+        if m:
+            text = text.replace(m.group(0), f'<meta name="description" content="{e(desc)}">', 1)
+    title = re.search(r"<title>(.*?)</title>", text, re.S).group(1)
+    tags = (f'\n<link rel="canonical" href="{url}">'
+            + ('\n<meta name="robots" content="noindex">' if rel == "404.html" else "")
+            + f'\n<meta property="og:type" content="website">\n<meta property="og:site_name" content="Talas State University">'
+            f'\n<meta property="og:title" content="{title}">\n<meta property="og:description" content="{e(desc)}">'
+            f'\n<meta property="og:url" content="{url}">\n<meta property="og:image" content="{SITE}img/main_building.jpg">'
+            f'\n<meta name="twitter:card" content="summary_large_image">')
+    return text.replace("</title>", "</title>" + tags, 1)
+
+
 def write(rel: str, text: str):
+    if rel.endswith(".html"):
+        text = seo_head(rel, text)
     p = ROOT / rel
     p.parent.mkdir(parents=True, exist_ok=True)
     p.write_text(text, encoding="utf-8")
@@ -453,7 +487,8 @@ def faculties_pages():
     b = "../"
     cards = "".join(f'<a class="card fac" href="{f["slug"]}/"><b>{e(f["name"])}</b><span>Since {f["since"]} · Dean: {e(f["dean"])}</span><span>{e(", ".join(f["depts"]))}</span></a>' for f in FACULTIES)
     write("faculties/index.html", page("Faculties | Talas State University",
-          f'<div class="wrap"><p class="crumbs"><a href="{b}">Home</a> / Faculties</p><h1 class="page-h">Faculties</h1><div class="fac-grid" style="padding-bottom:50px">{cards}</div></div>', base=b, active="faculties/"))
+          f'<div class="wrap"><p class="crumbs"><a href="{b}">Home</a> / Faculties</p><h1 class="page-h">Faculties</h1><div class="fac-grid" style="padding-bottom:50px">{cards}</div></div>', base=b, active="faculties/",
+          description="The eleven faculties of Talas State University, from History and Philology to Medicine, Law and Veterinary Medicine, with their deans and programmes."))
     for f in FACULTIES:
         b2 = "../../"
         main = (f'<p>{f["text"]}</p><table><tr><th>Founded</th><td>{f["since"]}</td></tr><tr><th>Dean</th><td>{e(f["dean"])}</td></tr>'
@@ -544,7 +579,8 @@ def contacts_page():
 def sitemap_page():
     b = "../"
     items = "".join(f'<h3><a href="{b}{h}">{e(t)}</a></h3>' + ("<ul>" + "".join(f'<li><a href="{b}{h2}">{e(t2)}</a></li>' for t2, h2 in (d or [])) + "</ul>" if d else "") for t, h, d in MENU)
-    write("sitemap/index.html", page("Map of the site | Talas State University", inner(b, [("Map of the site", None)], "Map of the site", items), base=b))
+    write("sitemap/index.html", page("Map of the site | Talas State University", inner(b, [("Map of the site", None)], "Map of the site", items), base=b,
+          description="Map of the Talas State University website: every section and page, from admission and faculties to the National Library of Irad."))
 
 
 # ---------------------------------------------------------------- library pages
@@ -698,7 +734,8 @@ def book_reader(m):
 <div class="fr" style="margin-top:18px">{e(m["form"])}</div>{f'<div class="fr"><i>Translated from the Iradi by {e(m["translator"])}</i></div>' if m.get("translator") else ""}<div class="fr" style="margin-top:18px">{e(m.get("publisher", ""))}</div></header>
 {front}<h2 style="margin-top:50px">Contents</h2><ol class="contents">{items}</ol>
 <p class="end"><a class="btn" href="{secs[0]["id"]}/">Start reading &rarr;</a></p></article></div></div>"""
-    write(f'library/archive/{m["slug"]}/read/index.html', page(f'{m["title"]}: read online | Talas State University', body, base=b, active="library/", body_class="reading"))
+    write(f'library/archive/{m["slug"]}/read/index.html', page(f'{m["title"]}: read online | Talas State University', body, base=b, active="library/", body_class="reading",
+          description=f'Read “{m["title"]}” by {m["author"]} online in the Digital Archive of the National Library of Irad.'))
     b2 = "../../../../../"
     for i, sec in enumerate(secs):
         prev_ = secs[i - 1] if i else None
@@ -736,7 +773,8 @@ def reader_page(m):
 {text}
 <p class="end">End of text · {e(m["accession"])} · <a href="../">Record</a></p></article></div></div>"""
     write(f'library/archive/{m["slug"]}/read/index.html',
-          page(f'{m["title"]}: read online | Talas State University', body, base=b, active="library/", body_class="reading"))
+          page(f'{m["title"]}: read online | Talas State University', body, base=b, active="library/", body_class="reading",
+               description=f'Read {m["title"]} by {m["author"]} online, chapter by chapter, in the Digital Archive of the National Library of Irad.'))
 
 
 def main():
@@ -744,8 +782,10 @@ def main():
     news_pages(); about_pages(); faculties_pages(); admission_pages(); research_page(); students_page(); contacts_page(); sitemap_page()
     press = json.loads((DATA / "press.json").read_text(encoding="utf-8"))
     library_pages(load_works(), press)
-    write("404.html", page("Page not found | Talas State University", '<div class="wrap" style="padding:60px 28px"><h1 class="page-h">Page not found</h1><p>The page may have moved after the site update of 2024. <a href="https://mjsbroadbent.github.io/tsu/">Go to main page</a></p></div>', base="https://mjsbroadbent.github.io/tsu/"))
-    print("built")
+    write("404.html", page("Page not found | Talas State University", '<div class="wrap" style="padding:60px 28px"><h1 class="page-h">Page not found</h1><p>The page may have moved after the site update of 2024. <a href="https://mjsbroadbent.github.io/TSU/">Go to main page</a></p></div>', base="https://mjsbroadbent.github.io/TSU/"))
+    (ROOT / "sitemap.xml").write_text('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+                                      + "".join(f"  <url><loc>{u}</loc></url>\n" for u in SITEMAP) + "</urlset>\n", encoding="utf-8")
+    print("built,", len(SITEMAP), "pages in sitemap.xml")
 
 
 if __name__ == "__main__":

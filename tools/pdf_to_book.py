@@ -34,7 +34,11 @@ def inner(el):
     return "".join(out)
 
 
+SUBDIGITS = {0x2080 + i: ord("0") + i for i in range(10)}   # the PDF's old-style figures come out as subscript digits
+
+
 def clean(s):
+    s = s.translate(SUBDIGITS)
     for a, b in LIG.items():
         s = s.replace(a, b)
     s = s.replace("&", "&amp;").replace("&amp;lt;", "&lt;")
