@@ -118,7 +118,7 @@ def page(title, body, *, base, active="", who="", description="", body_class="",
   <ul class="who">{who_links}</ul>
   <div class="side-foot">
     <a class="side-logo" href="{base}"><img src="{base}assets/seal.svg" alt=""><b>Talas State<br>University</b></a>
-    <div class="soc"><a class="tp" href="https://mjsbroadbent.github.io/tulpar/" title="TSU on Tulpar" rel="noopener">T</a><a href="https://iradone.com/" title="TSU on IradOne" rel="noopener">1</a><a href="mailto:info@talasuniversity.org" title="E-mail">@</a></div>
+    <div class="soc"><a class="tp" href="https://tulparapp.com/" title="TSU on Tulpar" rel="noopener">T</a><a href="https://iradone.com/" title="TSU on IradOne" rel="noopener">1</a><a href="mailto:info@talasuniversity.org" title="E-mail">@</a></div>
     <ul class="side-links">
       <li><a href="{base}about/">Talas State University</a></li>
       <li><a href="{base}sitemap/">Map of the site</a></li>
@@ -152,7 +152,7 @@ def page(title, body, *, base, active="", who="", description="", body_class="",
 """
 
 
-SITE = "https://mjsbroadbent.github.io/TSU/"
+SITE = "https://talasuniversity.org/"
 DEFAULT_DESC = "Talas State University (TSU), the oldest and largest university in Irad, founded in 1958."
 SITEMAP = []
 
@@ -782,7 +782,7 @@ def main():
     news_pages(); about_pages(); faculties_pages(); admission_pages(); research_page(); students_page(); contacts_page(); sitemap_page()
     press = json.loads((DATA / "press.json").read_text(encoding="utf-8"))
     library_pages(load_works(), press)
-    write("404.html", page("Page not found | Talas State University", '<div class="wrap" style="padding:60px 28px"><h1 class="page-h">Page not found</h1><p>The page may have moved after the site update of 2024. <a href="https://mjsbroadbent.github.io/TSU/">Go to main page</a></p></div>', base="https://mjsbroadbent.github.io/TSU/"))
+    write("404.html", page("Page not found | Talas State University", '<div class="wrap" style="padding:60px 28px"><h1 class="page-h">Page not found</h1><p>The page may have moved after the site update of 2024. <a href="https://talasuniversity.org/">Go to main page</a></p></div>', base="https://talasuniversity.org/"))
     (ROOT / "sitemap.xml").write_text('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
                                       + "".join(f"  <url><loc>{u}</loc></url>\n" for u in SITEMAP) + "</urlset>\n", encoding="utf-8")
     print("built,", len(SITEMAP), "pages in sitemap.xml")
