@@ -142,7 +142,7 @@ def page(title, body, *, base, active="", who="", description="", body_class="",
     <div><h4>Science</h4><ul><li><a href="{base}research/">Research</a></li><li><a href="{base}library/">National Library</a></li><li><a href="{base}library/archive/">Digital archive</a></li><li><a href="{base}library/press/">TSU Press</a></li></ul></div>
     <div><h4>University</h4><ul><li><a href="{base}about/">About us</a></li><li><a href="{base}about/rector/">Rector</a></li><li><a href="{base}news/">News</a></li><li><a href="{base}contacts/">Contacts</a></li></ul></div>
   </div>
-  <div class="foot-bottom">© 1958–2026 Talas State University. Materials may be reproduced with a link to tsu.edu.ir.ad. Part of the Irad worldbuilding project: Irad is a fictional country. See also <a href="https://irad.wiki/" style="color:#9fb0c6">the Irad wiki</a> and <a href="https://talasherald.com/" style="color:#9fb0c6">the Talas Herald</a>.</div>
+  <div class="foot-bottom">© 1958–2026 Talas State University. Materials may be reproduced with a link to tsu.edu.ir.ad. See also <a href="https://irad.wiki/" style="color:#9fb0c6">Irad Wiki</a> and <a href="https://talasherald.com/" style="color:#9fb0c6">the Talas Herald</a>.</div>
 </footer>
 </main>
 <button class="totop" type="button" onclick="window.scrollTo(0,0)"><span>&uarr;</span>Back to top</button>
