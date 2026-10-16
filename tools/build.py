@@ -1,4 +1,4 @@
-"""Build the Talas State University site (tsu.edu.ir.ad) from tools/ and data/.
+"""Build the Talas State University site (talasuniversity.org) from tools/ and data/.
 
     python3 tools/build.py
 
@@ -118,7 +118,7 @@ def page(title, body, *, base, active="", who="", description="", body_class="",
   <ul class="who">{who_links}</ul>
   <div class="side-foot">
     <a class="side-logo" href="{base}"><img src="{base}assets/seal.svg" alt=""><b>Talas State<br>University</b></a>
-    <div class="soc"><a class="tp" href="https://mjsbroadbent.github.io/tulpar/" title="TSU on Tulpar" rel="noopener">T</a><a href="https://iradone.com/" title="TSU on IradOne" rel="noopener">1</a><a href="mailto:info@tsu.edu.ir.ad" title="E-mail">@</a></div>
+    <div class="soc"><a class="tp" href="https://mjsbroadbent.github.io/tulpar/" title="TSU on Tulpar" rel="noopener">T</a><a href="https://iradone.com/" title="TSU on IradOne" rel="noopener">1</a><a href="mailto:info@talasuniversity.org" title="E-mail">@</a></div>
     <ul class="side-links">
       <li><a href="{base}about/">Talas State University</a></li>
       <li><a href="{base}sitemap/">Map of the site</a></li>
@@ -137,12 +137,12 @@ def page(title, body, *, base, active="", who="", description="", body_class="",
 {body}
 <footer class="foot">
   <div class="wrap">
-    <div><h4>Talas State University</h4><p>Talas Mamlekettik Universiteti<br>12 University Street, Talas 724000, Irad<br>Admissions Office: +996-39-2-31-40-11<br>Rector's reception: +996-39-2-31-40-00<br>info@tsu.edu.ir.ad</p></div>
+    <div><h4>Talas State University</h4><p>Talas Mamlekettik Universiteti<br>12 University Street, Talas 724000, Irad<br>Admissions Office: +996-39-2-31-40-11<br>Rector's reception: +996-39-2-31-40-00<br>info@talasuniversity.org</p></div>
     <div><h4>Study</h4><ul><li><a href="{base}admission/">Admission</a></li><li><a href="{base}faculties/">Faculties</a></li><li><a href="{base}admission/evening/">Evening courses</a></li><li><a href="{base}students/">For students</a></li></ul></div>
     <div><h4>Science</h4><ul><li><a href="{base}research/">Research</a></li><li><a href="{base}library/">National Library</a></li><li><a href="{base}library/archive/">Digital archive</a></li><li><a href="{base}library/press/">TSU Press</a></li></ul></div>
     <div><h4>University</h4><ul><li><a href="{base}about/">About us</a></li><li><a href="{base}about/rector/">Rector</a></li><li><a href="{base}news/">News</a></li><li><a href="{base}contacts/">Contacts</a></li></ul></div>
   </div>
-  <div class="foot-bottom">© 1958–2026 Talas State University. Materials may be reproduced with a link to tsu.edu.ir.ad. See also <a href="https://irad.wiki/" style="color:#9fb0c6">Irad Wiki</a> and <a href="https://talasherald.com/" style="color:#9fb0c6">the Talas Herald</a>.</div>
+  <div class="foot-bottom">© 1958–2026 Talas State University. Materials may be reproduced with a link to talasuniversity.org. See also <a href="https://irad.wiki/" style="color:#9fb0c6">Irad Wiki</a> and <a href="https://talasherald.com/" style="color:#9fb0c6">the Talas Herald</a>.</div>
 </footer>
 </main>
 <button class="totop" type="button" onclick="window.scrollTo(0,0)"><span>&uarr;</span>Back to top</button>
@@ -256,7 +256,7 @@ NEWS = [
          lead="The National Library of Irad has opened its Digital Archive to readers, beginning with Aikokul Tursunbek kyzy's stories of the partition years.",
          body=["The National Library of Irad, the university's library, has opened a Digital Archive for long-form works that are hard to find in print: literary works, memoirs, theses and the reports of the university's institutes. Every item can be read online in the library's reader or downloaded as a PDF.",
                "The first works in the archive are Aikokul Tursunbek kyzy's <a href=\"../../library/archive/twelve-kilometres/\"><i>Twelve Kilometres</i></a> (<i>On Eki Chakyrym</i>), twelve stories and a coda from the partition years of 2006–2009, published by Arsha Books in Iradi in 2015 and in Aidana Mukash kyzy's English translation in 2016, and the author's <a href=\"../../library/archive/bazaar-chubar/\">revised and expanded “Bazaar Chubar”</a> (2019), the story of a walnut buyer's daughter in Bazar-Korgon in the autumn of 2007.",
-               "“A national library should keep what its own country writes about itself,” said the director of the library. Authors and families who wish to deposit a work may write to library@tsu.edu.ir.ad."]),
+               "“A national library should keep what its own country writes about itself,” said the director of the library. Authors and families who wish to deposit a work may write to library@talasuniversity.org."]),
     dict(slug="rabat-i-safed-coins", date="2026-10-10", img="img/news_lab_staff.jpg", tag="Research",
          title="Rabat-i-Safed coins go to Nurzhan for testing",
          lead="Kara-Khanid coins found by the university's expedition will be analysed at the Nurzhan Polytechnic Institute before publication.",
@@ -332,7 +332,7 @@ def render_text(md: str):
 
 
 def citation(m):
-    url = f'https://tsu.edu.ir.ad/library/archive/{e(m["slug"])}/'
+    url = f'https://talasuniversity.org/library/archive/{e(m["slug"])}/'
     if m.get("book"):
         year = re.findall(r"\d{4}", m.get("published", ""))
         tr = f' Translated by {e(m["translator"])}.' if m.get("translator") else ""
@@ -465,7 +465,7 @@ def about_pages():
 <p><b>Professor Kubanychbek Sultanaliev</b>, Doctor of Economic Sciences, has been rector of Talas State University since 2017. Under the 2007 statute the rector is appointed by the Governor of the Irad Special Economic Zone on the nomination of the Academic Council.</p>
 <p>Born in Talas in 1961, he graduated from the Faculty of Economics of Iradi State University (now TSU) in 1983 and defended his doctoral dissertation on the territorial economy in 2004. He was dean of the Faculty of Economics and Management (2009–2015) and first vice-rector (2015–2017).</p>
 <h3>Rector's reception</h3>
-<p>Tuesdays, 15:00–17:00, main building, room 201, by appointment: +996-39-2-31-40-00. Students may also write to rector@tsu.edu.ir.ad.</p>
+<p>Tuesdays, 15:00–17:00, main building, room 201, by appointment: +996-39-2-31-40-00. Students may also write to rector@talasuniversity.org.</p>
 <h2>Vice-rectors</h2>
 <table><tr><th>First vice-rector (academic affairs)</th><td>Prof. Almaz Kenzhebaev</td></tr><tr><th>Vice-rector for research</th><td>Prof. Jyldyz Sarybaeva</td></tr><tr><th>Vice-rector for international relations</th><td>Assoc. Prof. Timur Akmatov</td></tr><tr><th>Vice-rector for students and youth</th><td>Bakytbek Omurzakov</td></tr></table>
 <p class="muted">The <a href="{b2}library/press/">Annual Report of the Rector</a> is published each spring.</p>"""
@@ -492,7 +492,7 @@ def faculties_pages():
     for f in FACULTIES:
         b2 = "../../"
         main = (f'<p>{f["text"]}</p><table><tr><th>Founded</th><td>{f["since"]}</td></tr><tr><th>Dean</th><td>{e(f["dean"])}</td></tr>'
-                f'<tr><th>Departments</th><td>{"<br>".join(e(d) for d in f["depts"])}</td></tr><tr><th>Dean’s office</th><td>Tel. 2-31-4{FACULTIES.index(f)+1:01d}-{20 + FACULTIES.index(f)} · {f["slug"]}@tsu.edu.ir.ad</td></tr></table>'
+                f'<tr><th>Departments</th><td>{"<br>".join(e(d) for d in f["depts"])}</td></tr><tr><th>Dean’s office</th><td>Tel. 2-31-4{FACULTIES.index(f)+1:01d}-{20 + FACULTIES.index(f)} · {f["slug"]}@talasuniversity.org</td></tr></table>'
                 f'<p><a class="btn" href="{b2}admission/">Programmes and admission &#8599;</a></p>')
         sub = ("Faculties", [(x["name"].replace("Faculty of ", ""), f'faculties/{x["slug"]}/') for x in FACULTIES])
         write(f'faculties/{f["slug"]}/index.html', page(f'{f["name"]} | Talas State University', inner(b2, [("Faculties", "faculties/")], f["name"], main, sub), base=b2, active="faculties/"))
@@ -519,7 +519,7 @@ def admission_pages():
 <h2 id="guide">Applicant's guide</h2>
 <p>The printed <i>Applicant's Guide 2026</i> is available free in the main building, room 105, and at school career days in Talas, Nurzhan and Iyık Janyl.</p>
 <h2 id="diaspora">For applicants from the diaspora</h2>
-<p>Iradis abroad and their children may apply with foreign school certificates. Contact the international office: international@tsu.edu.ir.ad.</p>"""
+<p>Iradis abroad and their children may apply with foreign school certificates. Contact the international office: international@talasuniversity.org.</p>"""
     write("admission/index.html", page("Admission | Talas State University", inner(b, [("Admission", "admission/")], "Admission", main, sub), base=b, active="admission/", who="entrant"))
     b2 = "../../"
     ev = f"""
@@ -543,9 +543,9 @@ def research_page():
 <h2 id="glaciology">Glaciology and the Manas observatory</h2>
 <p>With the Manas Peak Glaciological Observatory (founded 1964) the Faculty of Geography maintains the inventory of the 268 glaciers of the Iradi Talas basin. Prof. Nazira Isaeva leads the projections of peak water, expected in the 2030s and 2040s.</p>
 <h2 id="bulletin">Bulletin of Talas State University</h2>
-<p>Published since 1961 in four series: History; Philology; Natural Sciences; Economics and Law. Two to four issues a year per series. Submissions: bulletin@tsu.edu.ir.ad.</p>
+<p>Published since 1961 in four series: History; Philology; Natural Sciences; Economics and Law. Two to four issues a year per series. Submissions: bulletin@talasuniversity.org.</p>
 <h2 id="partners">For business partners</h2>
-<p>Contract research, laboratory testing (soil, water, veterinary DNA), surveys and training for companies and organisations. Contact the research office: research@tsu.edu.ir.ad, tel. 2-31-40-30.</p>"""
+<p>Contract research, laboratory testing (soil, water, veterinary DNA), surveys and training for companies and organisations. Contact the research office: research@talasuniversity.org, tel. 2-31-40-30.</p>"""
     sub = ("Research", [("Institutes", "research/"), ("Bulletin", "research/#bulletin"), ("TSU Press", "library/press/"), ("Library", "library/")])
     write("research/index.html", page("Research | Talas State University", inner(b, [("Research", "research/")], "Research", main, sub), base=b, active="research/", who="partner"))
 
@@ -568,9 +568,9 @@ def contacts_page():
     b = "../"
     main = f"""
 <h2>Address</h2><p>Talas State University, 12 University Street, Talas 724000, Irad</p>
-<table><tr><th>Rector's reception</th><td>+996-39-2-31-40-00 · rector@tsu.edu.ir.ad</td></tr><tr><th>Admissions Office</th><td>+996-39-2-31-40-11 · admission@tsu.edu.ir.ad</td></tr>
-<tr><th>National Library</th><td>+996-39-2-31-40-50 · library@tsu.edu.ir.ad</td></tr><tr><th>International office</th><td>+996-39-2-31-40-21 · international@tsu.edu.ir.ad</td></tr>
-<tr><th>Research office</th><td>+996-39-2-31-40-30 · research@tsu.edu.ir.ad</td></tr><tr><th>Press service</th><td>+996-39-2-31-40-05 · press@tsu.edu.ir.ad</td></tr></table>
+<table><tr><th>Rector's reception</th><td>+996-39-2-31-40-00 · rector@talasuniversity.org</td></tr><tr><th>Admissions Office</th><td>+996-39-2-31-40-11 · admission@talasuniversity.org</td></tr>
+<tr><th>National Library</th><td>+996-39-2-31-40-50 · library@talasuniversity.org</td></tr><tr><th>International office</th><td>+996-39-2-31-40-21 · international@talasuniversity.org</td></tr>
+<tr><th>Research office</th><td>+996-39-2-31-40-30 · research@talasuniversity.org</td></tr><tr><th>Press service</th><td>+996-39-2-31-40-05 · press@talasuniversity.org</td></tr></table>
 <h2 id="staff">For employees</h2><p>Staff webmail, the HR office (main building, room 110) and the trade union committee (room 118). The staff intranet is available inside the university network.</p>
 <h2>Getting here</h2><p>Minibuses 4, 11 and 27 to the stop “Universitet”. The main building faces the university square, a ten-minute walk from Central Square.</p>"""
     write("contacts/index.html", page("Contacts | Talas State University", inner(b, [("Contacts", "contacts/")], "Contacts", main), base=b, active="contacts/", who="employee"))
@@ -614,7 +614,7 @@ def library_pages(works, press):
 <h2 id="theses">Theses and dissertations</h2>
 <p>Every candidate's and doctoral dissertation defended at the university since 1961, and master's theses since 2005. Recent theses are being added to the <a href="{b}library/archive/">Digital archive</a> with the authors' consent.</p>
 <h2 id="deposit">Deposit a work</h2>
-<p>The Digital Archive accepts long-form works on Irad by members of the university and, at the library's discretion, by other authors: fiction, memoirs, oral histories, theses, translations. Write to library@tsu.edu.ir.ad.</p>
+<p>The Digital Archive accepts long-form works on Irad by members of the university and, at the library's discretion, by other authors: fiction, memoirs, oral histories, theses, translations. Write to library@talasuniversity.org.</p>
 </div><div><nav class="card subnav"><h4>Library</h4><a href="{b}library/archive/">Digital archive</a><a href="{b}library/press/">TSU Press catalogue</a><a href="#hours">Opening hours</a><a href="#sound">Sound archive</a><a href="#theses">Theses</a><a href="#deposit">Deposit a work</a></nav></div></div></div>"""
     write("library/index.html", page("National Library of Irad | Talas State University", body, base=b, active="library/"))
 
