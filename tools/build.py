@@ -567,7 +567,7 @@ def students_page():
 def contacts_page():
     b = "../"
     main = f"""
-<h2>Address</h2><p>Talas State University, 12 University Street, Talas 724000, Irad</p>
+<h2>Address</h2><p>Talas State University, 12 University Street, Talas 724000, Irad · <a href="https://maps.attelkom.net/?p=talas-state-university">Map</a></p>
 <table><tr><th>Rector's reception</th><td>+996-39-2-31-40-00 · rector@talasuniversity.org</td></tr><tr><th>Admissions Office</th><td>+996-39-2-31-40-11 · admission@talasuniversity.org</td></tr>
 <tr><th>National Library</th><td>+996-39-2-31-40-50 · library@talasuniversity.org</td></tr><tr><th>International office</th><td>+996-39-2-31-40-21 · international@talasuniversity.org</td></tr>
 <tr><th>Research office</th><td>+996-39-2-31-40-30 · research@talasuniversity.org</td></tr><tr><th>Press service</th><td>+996-39-2-31-40-05 · press@talasuniversity.org</td></tr></table>
