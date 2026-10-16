@@ -25,7 +25,7 @@ python3 tools/build.py
 
 ## Library and Digital Archive
 
-`library/` is the Scientific Library: about the library, hours and services, the ethnography sound archive, theses, the **Digital Archive** (`library/archive/`) and the **TSU Press catalogue** (`library/press/`, searchable; the header search lands here).
+`library/` is the National Library of Irad (the university's library; formerly the TSU Scientific Library, national library since 1993): about the library, hours and services, the ethnography sound archive, theses, the **Digital Archive** (`library/archive/`) and the **TSU Press catalogue** (`library/press/`, searchable; the header search lands here).
 
 Each work in the archive gets a record page (abstract, catalogue record, citation, PDF download) at `library/archive/<slug>/` and an online reader at `library/archive/<slug>/read/` (chapter list, text size, progress bar, remembers where you stopped).
 

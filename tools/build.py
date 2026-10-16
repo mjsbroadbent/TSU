@@ -32,7 +32,7 @@ MENU = [
         ("Talas State University", "about/"), ("Rector", "about/rector/"), ("History of the university", "about/history/"),
         ("Council of Elders (Aksakaldar keneshi)", "about/#elders"), ("Quality assurance", "about/#quality"),
         ("Alumni association", "about/#alumni"), ("Anti-corruption", "about/#anticorruption"),
-        ("Scientific library", "library/")]),
+        ("National Library of Irad", "library/")]),
     ("Research", "research/", [
         ("Institutes and departments", "research/"), ("Bulletin of Talas State University", "research/#bulletin"),
         ("Talas State University Press", "library/press/"), ("Institute of Sociology surveys", "research/#sociology"),
@@ -43,7 +43,7 @@ MENU = [
         ("Sport club and Universitet Talas", "students/#sport"), ("Career centre", "students/#career"),
         ("Student e-portal", "students/#portal")]),
     ("Library", "library/", [
-        ("Scientific library", "library/"), ("Digital archive", "library/archive/"),
+        ("National Library of Irad", "library/"), ("Digital archive", "library/archive/"),
         ("TSU Press catalogue", "library/press/"), ("Opening hours and services", "library/#hours"),
         ("Ethnography sound archive", "library/#sound"), ("Theses and dissertations", "library/#theses")]),
     ("Contacts", "contacts/", None),
@@ -128,7 +128,7 @@ def page(title, body, *, base, active="", who="", description="", body_class="",
       <li><a href="{base}admission/#phd">PhD</a></li>
       <li class="gap"><a href="{base}admission/">Admissions Office</a></li>
       <li><a href="{base}students/#portal">Student e-portal</a></li>
-      <li><a href="{base}library/">Scientific library</a></li>
+      <li><a href="{base}library/">National Library</a></li>
     </ul>
     <p class="side-copy">© 1958–2026 Talas State University</p>
   </div>
@@ -139,7 +139,7 @@ def page(title, body, *, base, active="", who="", description="", body_class="",
   <div class="wrap">
     <div><h4>Talas State University</h4><p>Talas Mamlekettik Universiteti<br>12 University Street, Talas 724000, Irad<br>Admissions Office: +996-39-2-31-40-11<br>Rector's reception: +996-39-2-31-40-00<br>info@tsu.edu.ir.ad</p></div>
     <div><h4>Study</h4><ul><li><a href="{base}admission/">Admission</a></li><li><a href="{base}faculties/">Faculties</a></li><li><a href="{base}admission/evening/">Evening courses</a></li><li><a href="{base}students/">For students</a></li></ul></div>
-    <div><h4>Science</h4><ul><li><a href="{base}research/">Research</a></li><li><a href="{base}library/">Scientific library</a></li><li><a href="{base}library/archive/">Digital archive</a></li><li><a href="{base}library/press/">TSU Press</a></li></ul></div>
+    <div><h4>Science</h4><ul><li><a href="{base}research/">Research</a></li><li><a href="{base}library/">National Library</a></li><li><a href="{base}library/archive/">Digital archive</a></li><li><a href="{base}library/press/">TSU Press</a></li></ul></div>
     <div><h4>University</h4><ul><li><a href="{base}about/">About us</a></li><li><a href="{base}about/rector/">Rector</a></li><li><a href="{base}news/">News</a></li><li><a href="{base}contacts/">Contacts</a></li></ul></div>
   </div>
   <div class="foot-bottom">© 1958–2026 Talas State University. Materials may be reproduced with a link to tsu.edu.ir.ad. Part of the Irad worldbuilding project: Irad is a fictional country. See also <a href="https://irad.wiki/" style="color:#9fb0c6">the Irad wiki</a> and <a href="https://talasherald.com/" style="color:#9fb0c6">the Talas Herald</a>.</div>
@@ -219,10 +219,10 @@ FACULTIES = [
 NEWS = [
     dict(slug="digital-archive-bazaar-chubar", date="2026-10-15", img="img/reading_room.jpg", tag="Library",
          title="Digital archive opens with Aikokul Tursunbek kyzy's “Twelve Kilometres”",
-         lead="The Scientific Library has opened its Digital Archive to readers, beginning with Aikokul Tursunbek kyzy's stories of the partition years.",
-         body=["The Scientific Library of Talas State University has opened a Digital Archive for long-form works that are hard to find in print: literary works, memoirs, theses and the reports of the university's institutes. Every item can be read online in the library's reader or downloaded as a PDF.",
+         lead="The National Library of Irad has opened its Digital Archive to readers, beginning with Aikokul Tursunbek kyzy's stories of the partition years.",
+         body=["The National Library of Irad, the university's library, has opened a Digital Archive for long-form works that are hard to find in print: literary works, memoirs, theses and the reports of the university's institutes. Every item can be read online in the library's reader or downloaded as a PDF.",
                "The first works in the archive are Aikokul Tursunbek kyzy's <a href=\"../../library/archive/twelve-kilometres/\"><i>Twelve Kilometres</i></a> (<i>On Eki Chakyrym</i>), twelve stories and a coda from the partition years of 2006–2009, published by Arsha Books in Iradi in 2015 and in Aidana Mukash kyzy's English translation in 2016, and the author's <a href=\"../../library/archive/bazaar-chubar/\">revised and expanded “Bazaar Chubar”</a> (2019), the story of a walnut buyer's daughter in Bazar-Korgon in the autumn of 2007.",
-               "“A university library should keep what its own country writes about itself,” said the director of the library. Authors and families who wish to deposit a work may write to library@tsu.edu.ir.ad."]),
+               "“A national library should keep what its own country writes about itself,” said the director of the library. Authors and families who wish to deposit a work may write to library@tsu.edu.ir.ad."]),
     dict(slug="rabat-i-safed-coins", date="2026-10-10", img="img/news_lab_staff.jpg", tag="Research",
          title="Rabat-i-Safed coins go to Nurzhan for testing",
          lead="Kara-Khanid coins found by the university's expedition will be analysed at the Nurzhan Polytechnic Institute before publication.",
@@ -304,10 +304,10 @@ def citation(m):
         tr = f' Translated by {e(m["translator"])}.' if m.get("translator") else ""
         sub = f' ({e(m["subtitle"])})' if m.get("subtitle") else ""
         return (f'{e(m["author_sort"])}. <i>{e(m["title"])}{sub}</i>.{tr} {e(m.get("publisher", ""))}, {year[-1] if year else ""}. '
-                f'Talas State University Scientific Library, Digital Archive, {e(m["accession"])}. {url}')
+                f'National Library of Irad (Talas State University), Digital Archive, {e(m["accession"])}. {url}')
     part = f' In <i>{e(m["part_of"])}</i>.' if m.get("part_of") else ""
     return (f'{e(m["author_sort"])}. \u201c{e(m["title"])}.\u201d{part} '
-            f'Talas State University Scientific Library, Digital Archive, {e(m["accession"])}. {url}')
+            f'National Library of Irad (Talas State University), Digital Archive, {e(m["accession"])}. {url}')
 
 
 def w_cover(m, base=""):
@@ -388,7 +388,7 @@ def home():
             f'<a class="btn" href="{b}about/#alumni">To the community &#8599;</a></div>'
             f'<div class="alum-card"><div class="alum-ini">AK</div><b>Aiperi Kalysbekova</b><p>Computer science, class of 2013. “We wrote the first version in a dormitory room in Building 6. The department let us use the lab at night.”</p><a class="btn" href="{b}about/#alumni">Read more &#8599;</a></div></div></section>')
     useful = (f'<section class="sec wrap"><h2 class="sec-t bar-t">Useful links</h2><div class="useful">'
-              + "".join(f'<div class="card"><div class="ill">{ICONS[i]}</div><a class="btn" href="{b}{h}">{e(t)} &#8599;</a></div>' for i, t, h in (("library", "Scientific library", "library/"), ("media", "Mass media", "news/"), ("people", "For employees", "contacts/#staff")))
+              + "".join(f'<div class="card"><div class="ill">{ICONS[i]}</div><a class="btn" href="{b}{h}">{e(t)} &#8599;</a></div>' for i, t, h in (("library", "National Library", "library/"), ("media", "Mass media", "news/"), ("people", "For employees", "contacts/#staff")))
               + "</div></section>")
     body = hero + services + news + magz + guide + pr + intl + stats + disc + alum + useful
     return page("Talas State University", body, base=b, who="entrant")
@@ -409,7 +409,7 @@ def news_pages():
 
 def about_pages():
     b = "../"
-    sub = ("About us", [("Talas State University", "about/"), ("Rector", "about/rector/"), ("History", "about/history/"), ("Scientific library", "library/"), ("Contacts", "contacts/")])
+    sub = ("About us", [("Talas State University", "about/"), ("Rector", "about/rector/"), ("History", "about/history/"), ("National Library of Irad", "library/"), ("Contacts", "contacts/")])
     main = f"""
 <h2>Talas State University</h2>
 <p><b>Talas State University</b> (TSU; Iradi: <i>Talas Mamlekettik Universiteti</i>) is the oldest and largest university in Irad. It was founded in 1958 as the state university of the Iradi SSR, on the basis of the Talas Pedagogical Institute, and until 1993 was called Iradi State University named after V. I. Lenin. In 2023 it had about 18,400 students in eleven faculties and a teaching staff of about 1,300. Its publishing house, <a href="{b}library/press/">Talas State University Press</a>, is the main publisher of scholarly work on Irad.</p>
@@ -442,9 +442,9 @@ def about_pages():
 <h2>1992</h2>
 <p>Many of the university's staff and students supported the Winter Uprising of 1992. In January 1992 history students led the occupation of Central Square. The main building was damaged by shelling during the siege of Talas and was restored by its own staff and students.</p>
 <h2>The territorial period</h2>
-<p>During the territorial period English became a language of instruction alongside Iradi, and Russian was gradually reduced to an elective. Exchange programmes with American universities, funded by the territorial government and US foundations, trained a generation of faculty, and the Faculty of Agriculture worked with the foreign agribusiness companies around Talas. In 1993, the year of the Toponymic Heritage Statute, the Academic Council dropped Lenin's name and the university became Talas State University; the national name was set aside while the status of the Autonomous Tribal Regions remained unsettled. The new seal followed in 1994, and so did Talas State University Press. Older Talas residents still call the university IGU.</p>
+<p>During the territorial period English became a language of instruction alongside Iradi, and Russian was gradually reduced to an elective. Exchange programmes with American universities, funded by the territorial government and US foundations, trained a generation of faculty, and the Faculty of Agriculture worked with the foreign agribusiness companies around Talas. In 1993, the year of the Toponymic Heritage Statute, the Academic Council dropped Lenin's name and the university became Talas State University; the national name was set aside while the status of the Autonomous Tribal Regions remained unsettled. The new seal followed in 1994, and so did Talas State University Press. Older Talas residents still call the university IGU. The same year the university's Scientific Library was made the National Library of Irad.</p>
 <h2>Since 2007</h2>
-<p>Since 2007 the university has been governed by a rector appointed by the Governor of the Irad Special Economic Zone. The Faculty of Arts and Music, created in 1994, and the computer science department have grown fastest in recent years. In 2026 the Scientific Library opened its <a href="{b2}library/archive/">Digital Archive</a>.</p>
+<p>Since 2007 the university has been governed by a rector appointed by the Governor of the Irad Special Economic Zone. The Faculty of Arts and Music, created in 1994, and the computer science department have grown fastest in recent years. In 2026 the National Library opened its <a href="{b2}library/archive/">Digital Archive</a>.</p>
 <p class="muted">Further reading: <i>Fifty Years of Talas State University, 1958–2008</i> (TSU Press, 2008).</p>"""
     write("about/history/index.html", page("History | Talas State University", inner(b2, [("About us", "about/"), ("History", None)], "History of the university", hist, sub), base=b2, active="about/"))
 
@@ -534,7 +534,7 @@ def contacts_page():
     main = f"""
 <h2>Address</h2><p>Talas State University, 12 University Street, Talas 724000, Irad</p>
 <table><tr><th>Rector's reception</th><td>+996-39-2-31-40-00 · rector@tsu.edu.ir.ad</td></tr><tr><th>Admissions Office</th><td>+996-39-2-31-40-11 · admission@tsu.edu.ir.ad</td></tr>
-<tr><th>Scientific library</th><td>+996-39-2-31-40-50 · library@tsu.edu.ir.ad</td></tr><tr><th>International office</th><td>+996-39-2-31-40-21 · international@tsu.edu.ir.ad</td></tr>
+<tr><th>National Library</th><td>+996-39-2-31-40-50 · library@tsu.edu.ir.ad</td></tr><tr><th>International office</th><td>+996-39-2-31-40-21 · international@tsu.edu.ir.ad</td></tr>
 <tr><th>Research office</th><td>+996-39-2-31-40-30 · research@tsu.edu.ir.ad</td></tr><tr><th>Press service</th><td>+996-39-2-31-40-05 · press@tsu.edu.ir.ad</td></tr></table>
 <h2 id="staff">For employees</h2><p>Staff webmail, the HR office (main building, room 110) and the trade union committee (room 118). The staff intranet is available inside the university network.</p>
 <h2>Getting here</h2><p>Minibuses 4, 11 and 27 to the stop “Universitet”. The main building faces the university square, a ten-minute walk from Central Square.</p>"""
@@ -557,21 +557,22 @@ def library_pages(works, press):
              ("clock", "Hours and services", "Reading rooms, borrowing, interlibrary loan and scanning.", "library/#hours")]
     latest = "".join(work_row(m, b) for m in works[:3])
     body = f"""
-<section class="lib-hero"><img src="{b}img/reading_room.jpg" alt=""><div class="in"><p style="margin:0 0 4px;opacity:.85">Talas State University</p><h1>Scientific Library</h1>
+<section class="lib-hero"><img src="{b}img/reading_room.jpg" alt=""><div class="in"><p style="margin:0 0 4px;opacity:.85">Talas State University</p><h1>National Library of Irad</h1>
 <form class="lib-search" action="{b}library/press/" method="get"><input name="q" placeholder="Search the catalogue: title, author, subject" aria-label="Search the catalogue"><select name="in" aria-label="Where"><option>Catalogue</option><option>Digital archive</option></select><button class="btn" type="submit">Search</button></form></div></section>
 <section class="sec wrap"><div class="lib-tiles">{''.join(f'<a class="card lib-tile" href="{b}{h}">{ICONS[i]}<b>{e(t)}</b><span>{e(s)}</span></a>' for i, t, s, h in tiles)}</div></section>
 <section class="sec wrap">{sec_t("New in the digital archive", "library/archive/", b)}<div class="works">{latest}</div></section>
 <div class="wrap"><div class="inner" style="padding-top:26px"><div class="card inner-main">
 <h2>About the library</h2>
-<p>The Scientific Library was founded with the university in 1958 from the library of the Talas Pedagogical Institute. It holds about 1.1 million volumes: books and periodicals in Iradi, Russian and English, the deposit copies of TSU Press, the university's theses since 1961, a rare books room with Iradi printing of the 1920s and 1930s in the Latin and Cyrillic scripts, and the newspaper collection, including a complete file of the <i>Talas Herald</i> since 1993.</p>
-<p>The reading rooms were damaged in 1992 together with the main building; part of the Soviet-era card catalogue was lost and has been rebuilt from accession books. The electronic catalogue covers acquisitions since 1996.</p>
+<p>The National Library of Irad (<i>Irad Uluttuk Kitepkanasy</i>) is the national library of the country and the library of Talas State University. It grew out of the university's Scientific Library, founded with the university in 1958 from the library of the Talas Pedagogical Institute, which was made the national library in 1993 and received the Iradi-language and rare collections of the Soviet republican library, the Pushkin Library in Kobozev, in 1993–94. It receives two legal deposit copies of every book, newspaper and journal published in Irad and publishes the national bibliography, <i>Irad Kitep Letopisi</i>.</p>
+<p>The library holds about 2.3 million items, 1.6 million of them in Talas: books and periodicals in Iradi, Russian and English, the deposit copies of TSU Press, the university's theses since 1961, a rare books room with Iradi printing of the 1920s and 1930s in the Latin and Cyrillic scripts, and the newspaper collection, including a complete file of the <i>Talas Herald</i> since 1993.</p>
+<p>The reading rooms were damaged in 1992 together with the main building; part of the Soviet-era card catalogue was lost and has been rebuilt from accession books. Since 2001 the library has had its own building at 14 University Street, beside the State Archives. The electronic catalogue covers acquisitions since 1996. The Nurzhan branch (the former Pushkin Library, 9 Azatlık Prospect) keeps the Russian-language and technical collections; items can be ordered between the two sites.</p>
 <h2 id="hours">Opening hours</h2>
-<table class="hours"><tr><th>Reading room 1 (humanities), main building, 2nd floor</th><td>Mon–Fri 9:00–19:00 · Sat 10:00–15:00</td></tr>
+<table class="hours"><tr><th>Great Reading Room (humanities), library building, 14 University Street</th><td>Mon–Fri 9:00–19:00 · Sat 10:00–15:00</td></tr>
 <tr><th>Reading room 2 (sciences), Building 4</th><td>Mon–Fri 9:00–18:00</td></tr><tr><th>Lending desk</th><td>Mon–Fri 9:00–17:00</td></tr>
 <tr><th>Rare books and manuscripts</th><td>Tue and Thu 10:00–16:00, by appointment</td></tr></table>
 <p>Closed on public holidays and on the last Friday of each month (sanitary day).</p>
 <h2>Services</h2>
-<ul><li>Borrowing for students and staff with a library card (issued at the lending desk with your student or staff card).</li><li>External readers: day pass IS 50, annual card IS 400.</li><li>Interlibrary loan with the National Library of Irad and the Nurzhan Polytechnic Institute.</li><li>Scanning on request: IS 3 per page; free for TSU Press titles out of print.</li></ul>
+<ul><li>Borrowing for students and staff with a library card (issued at the lending desk with your student or staff card).</li><li>External readers: day pass IS 50, annual card IS 400.</li><li>Delivery from the Nurzhan branch in 5–10 working days; interlibrary loan with the Nurzhan Polytechnic Institute and the Cathedral Seminary Library of Iyık Janyl.</li><li>Any adult with an identity document may get a reader's card for the national collections.</li><li>Scanning on request: IS 3 per page; free for TSU Press titles out of print.</li></ul>
 <h2 id="sound">Ethnography sound archive</h2>
 <p>Held jointly with the Department of Ethnography: about 6,000 hours of recordings of oral epic, horseback chants, laments and song made on expeditions since the 1950s, copied from tape to digital files since 2009. Listening by appointment in the Department of Ethnography, Building 2, room 31.</p>
 <h2 id="theses">Theses and dissertations</h2>
@@ -579,7 +580,7 @@ def library_pages(works, press):
 <h2 id="deposit">Deposit a work</h2>
 <p>The Digital Archive accepts long-form works on Irad by members of the university and, at the library's discretion, by other authors: fiction, memoirs, oral histories, theses, translations. Write to library@tsu.edu.ir.ad.</p>
 </div><div><nav class="card subnav"><h4>Library</h4><a href="{b}library/archive/">Digital archive</a><a href="{b}library/press/">TSU Press catalogue</a><a href="#hours">Opening hours</a><a href="#sound">Sound archive</a><a href="#theses">Theses</a><a href="#deposit">Deposit a work</a></nav></div></div></div>"""
-    write("library/index.html", page("Scientific Library | Talas State University", body, base=b, active="library/"))
+    write("library/index.html", page("National Library of Irad | Talas State University", body, base=b, active="library/"))
 
     # archive listing
     b2 = "../../"
@@ -591,7 +592,7 @@ def library_pages(works, press):
 <div class="works" id="works">{rows}</div><p class="muted" id="wnone" hidden>Nothing matches your search.</p></div>
 <div><nav class="card subnav"><h4>Collections</h4>{''.join(f'<a href="#" data-c="{e(c)}">{e(c)} ({sum(1 for m in works if m["collection"] == c)})</a>' for c in colls)}<a href="#" data-c="">All</a></nav>
 <div class="card" style="padding:16px 18px;margin-top:16px;font-size:13.5px"><b>About the archive</b><p style="margin:6px 0 0;color:#555">Long-form works on Irad, to read online or download as PDF. Each item has a permanent address and a citation. To deposit a work, see <a href="{b2}library/#deposit">Deposit a work</a>.</p></div></div></div></div>"""
-    write("library/archive/index.html", page("Digital archive | Scientific Library | Talas State University", body, base=b2, active="library/"))
+    write("library/archive/index.html", page("Digital archive | National Library of Irad | Talas State University", body, base=b2, active="library/"))
 
     for m in works:
         record_page(m)
@@ -602,10 +603,10 @@ def library_pages(works, press):
                   + (f'<span class="a">{e(x["author"])}</span>' if x["author"] else "") + "</span>"
                   + ('<span class="s ro">Reading room</span>' if i % 3 else '<span class="s">Lending</span>') + "</li>" for i, x in enumerate(press))
     body = f"""<div class="wrap"><p class="crumbs"><a href="{b2}">Home</a> / <a href="{b2}library/">Library</a> / TSU Press catalogue</p><h1 class="page-h">Talas State University Press: catalogue</h1>
-<div class="card inner-main" style="margin-bottom:50px"><p>Talas State University Press, founded in 1994, is the main publisher of scholarly work on Irad. Deposit copies of every title are held by the Scientific Library. Availability shown is for the main library; most titles can be ordered from the TSU Press shop, main building, room 7.</p>
+<div class="card inner-main" style="margin-bottom:50px"><p>Talas State University Press, founded in 1994, is the main publisher of scholarly work on Irad. Deposit copies of every title are held by the National Library of Irad, the university's library. Availability shown is for the main library; most titles can be ordered from the TSU Press shop, main building, room 7.</p>
 <div class="cat-tools"><input id="pq" placeholder="Title, author or year" aria-label="Search the catalogue"><select id="pd" aria-label="Decade"><option value="">All years</option><option value="202">2020s</option><option value="201">2010s</option><option value="200">2000s</option><option value="199">1990s</option></select></div>
 <p class="muted" id="pcount">{len(press)} titles</p><ul class="cat-list" id="plist">{lis}</ul></div></div>"""
-    write("library/press/index.html", page("TSU Press catalogue | Scientific Library | Talas State University", body, base=b2, active="library/"))
+    write("library/press/index.html", page("TSU Press catalogue | National Library of Irad | Talas State University", body, base=b2, active="library/"))
 
 
 def work_row(m, base):
@@ -653,7 +654,7 @@ def record_page(m):
 <h2>Record</h2>
 <table class="rec">{''.join(f'<tr><th>{k}</th><td>{v}</td></tr>' for k, v in rows)}</table>
 <h2>How to cite</h2><p class="cite">{citation(m)}</p>"""
-    sub = ("Digital archive", [("All works", "library/archive/"), ("Read online", f'library/archive/{m["slug"]}/read/'), ("Scientific library", "library/"), ("Deposit a work", "library/#deposit")])
+    sub = ("Digital archive", [("All works", "library/archive/"), ("Read online", f'library/archive/{m["slug"]}/read/'), ("National Library of Irad", "library/"), ("Deposit a work", "library/#deposit")])
     write(f'library/archive/{m["slug"]}/index.html',
           page(f'{m["title"]} | Digital archive | Talas State University', inner(b, [("Library", "library/"), ("Digital archive", "library/archive/")], m["title"], main, sub), base=b, active="library/", description=m["abstract"][:200]))
 
