@@ -35,7 +35,7 @@ MENU = [
         ("National Library of Irad", "library/")]),
     ("Research", "research/", [
         ("Institutes and departments", "research/"), ("Bulletin of Talas State University", "research/#bulletin"),
-        ("Talas State University Press", "library/press/"), ("Institute of Sociology surveys", "research/#sociology"),
+        ("Talas State University Press", "press/"), ("Institute of Sociology surveys", "research/#sociology"),
         ("Rabat-i-Safed excavation", "research/#archaeology"), ("Glaciology and the Manas observatory", "research/#glaciology")]),
     ("Faculties", "faculties/", None),
     ("For students", "students/", [
@@ -141,7 +141,7 @@ def page(title, body, *, base, active="", who="", description="", body_class="",
   <div class="wrap">
     <div><h4>Talas State University</h4><p>Talas Mamlekettik Universiteti<br>12 University Street, Talas 724000, Irad<br>Admissions Office: +996-39-2-31-40-11<br>Rector's reception: +996-39-2-31-40-00<br>info@talasuniversity.org</p></div>
     <div><h4>Study</h4><ul><li><a href="{base}admission/">Admission</a></li><li><a href="{base}faculties/">Faculties</a></li><li><a href="{base}admission/evening/">Evening courses</a></li><li><a href="{base}students/">For students</a></li></ul></div>
-    <div><h4>Science</h4><ul><li><a href="{base}research/">Research</a></li><li><a href="{base}library/">National Library</a></li><li><a href="{base}library/archive/">Digital archive</a></li><li><a href="{base}library/press/">TSU Press</a></li></ul></div>
+    <div><h4>Science</h4><ul><li><a href="{base}research/">Research</a></li><li><a href="{base}library/">National Library</a></li><li><a href="{base}library/archive/">Digital archive</a></li><li><a href="{base}press/">TSU Press</a></li></ul></div>
     <div><h4>University</h4><ul><li><a href="{base}about/">About us</a></li><li><a href="{base}about/rector/">Rector</a></li><li><a href="{base}news/">News</a></li><li><a href="{base}contacts/">Contacts</a></li></ul></div>
   </div>
   <div class="foot-bottom">© 1958–2026 Talas State University. Materials may be reproduced with a link to talasuniversity.org. See also <a href="https://irad.wiki/" style="color:#9fb0c6">Irad Wiki</a> and <a href="https://talasherald.com/" style="color:#9fb0c6">the Talas Herald</a>.</div>
@@ -376,7 +376,7 @@ def home():
     sl = "".join(f'<a class="slide{" on" if i == 0 else ""}" href="{b}{h}"><img src="{b}{im}" alt="{e(alt)}"></a>' for i, (im, h, alt) in enumerate(slides))
     hero = f'<section class="hero">{sl}<div class="dots"></div></section>'
     svc = [("TSU Portal", "students/#portal", "timetable, grades"), ("e-Library", "library/", "catalogue"), ("Digital archive", "library/archive/", "read online"),
-           ("TSU Press", "library/press/", "132 titles"), ("Dormitory", "students/#dorms", "applications"), ("Career centre", "students/#career", "vacancies"),
+           ("TSU Press", "press/", f"{len(PRESS)} titles"), ("Dormitory", "students/#dorms", "applications"), ("Career centre", "students/#career", "vacancies"),
            ("Bulletin", "research/#bulletin", "journal"), ("Webmail", "contacts/#staff", "staff")]
     services = (f'<section class="sec wrap">{sec_t("Internal services", "students/")}<div class="svc">'
                 + "".join(f'<a href="{b}{h}">{e(t)}<small>{e(s)}</small></a>' for t, h, s in svc) + "</div></section>")
@@ -448,7 +448,7 @@ def about_pages():
     sub = ("About us", [("Talas State University", "about/"), ("Rector", "about/rector/"), ("History", "about/history/"), ("National Library of Irad", "library/"), ("Contacts", "contacts/")])
     main = f"""
 <h2>Talas State University</h2>
-<p><b>Talas State University</b> (TSU; Iradi: <i>Talas Mamlekettik Universiteti</i>) is the oldest and largest university in Irad. It was founded in 1958 as the state university of the Iradi SSR, on the basis of the Talas Pedagogical Institute, and until 1993 was called Iradi State University named after V. I. Lenin. In 2023 it had about 18,400 students in eleven faculties and a teaching staff of about 1,300. Its publishing house, <a href="{b}library/press/">Talas State University Press</a>, is the main publisher of scholarly work on Irad.</p>
+<p><b>Talas State University</b> (TSU; Iradi: <i>Talas Mamlekettik Universiteti</i>) is the oldest and largest university in Irad. It was founded in 1958 as the state university of the Iradi SSR, on the basis of the Talas Pedagogical Institute, and until 1993 was called Iradi State University named after V. I. Lenin. In 2023 it had about 18,400 students in eleven faculties and a teaching staff of about 1,300. Its publishing house, <a href="{b}press/">Talas State University Press</a>, is the main publisher of scholarly work on Irad.</p>
 <table><tr><th>Founded</th><td>1958</td></tr><tr><th>Former name</th><td>Iradi State University named after V. I. Lenin (IGU), 1958–1993</td></tr><tr><th>Status</th><td>State university of the Irad Special Economic Zone</td></tr><tr><th>Students</th><td>about 18,400 (2023), of them 1,900 in master's and doctoral programmes</td></tr><tr><th>Teaching staff</th><td>about 1,300</td></tr><tr><th>Faculties</th><td><a href="{b}faculties/">11</a></td></tr><tr><th>Languages of instruction</th><td>Iradi and English; Russian as an elective</td></tr><tr><th>Campus</th><td>Main building and eight teaching buildings on University Street, Talas; TSU Stadium; teaching stables; the Manas Peak field station</td></tr></table>
 <h2 id="seal">The university seal</h2>
 <p><img src="{b}assets/seal.svg" alt="Seal of Talas State University" style="float:right;width:190px;height:190px;margin:0 0 12px 20px">The seal shows the three peaks of the Talas Alatau under the eight-pointed star of Irad, an open book, and a wreath of wheat for the Faculty of Agriculture, one of the three founding faculties. The ribbon carries the motto <i>Bilim jaryk</i> ("Knowledge is light") above the founding year, 1958. The ring reads <i>Talas Mamlekettik Universiteti</i> above and <i>Talas State University</i> below. The present design dates from 1994, when the Soviet-era emblem with its hammer and sickle was replaced; the Iradi inscription was added in the Latin alphabet.</p>
@@ -548,7 +548,7 @@ def research_page():
 <p>Published since 1961 in four series: History; Philology; Natural Sciences; Economics and Law. Two to four issues a year per series. Submissions: bulletin@talasuniversity.org.</p>
 <h2 id="partners">For business partners</h2>
 <p>Contract research, laboratory testing (soil, water, veterinary DNA), surveys and training for companies and organisations. Contact the research office: research@talasuniversity.org, tel. 2-31-40-30.</p>"""
-    sub = ("Research", [("Institutes", "research/"), ("Bulletin", "research/#bulletin"), ("TSU Press", "library/press/"), ("Library", "library/")])
+    sub = ("Research", [("Institutes", "research/"), ("Bulletin", "research/#bulletin"), ("TSU Press", "press/"), ("Library", "library/")])
     write("research/index.html", page("Research | Talas State University", inner(b, [("Research", "research/")], "Research", main, sub), base=b, active="research/", who="partner"))
 
 
@@ -641,7 +641,7 @@ def library_pages(works, press):
                   + (f'<span class="a">{e(x["author"])}</span>' if x["author"] else "") + "</span>"
                   + ('<span class="s ro">Reading room</span>' if i % 3 else '<span class="s">Lending</span>') + "</li>" for i, x in enumerate(press))
     body = f"""<div class="wrap"><p class="crumbs"><a href="{b2}">Home</a> / <a href="{b2}library/">Library</a> / TSU Press catalogue</p><h1 class="page-h">Talas State University Press: catalogue</h1>
-<div class="card inner-main" style="margin-bottom:50px"><p>Talas State University Press, founded in 1994, is the main publisher of scholarly work on Irad. Deposit copies of every title are held by the National Library of Irad, the university's library. Availability shown is for the main library; most titles can be ordered from the TSU Press shop, main building, room 7.</p>
+<div class="card inner-main" style="margin-bottom:50px"><p><a href="{b2}press/">Talas State University Press</a>, founded in 1994, is the main publisher of scholarly work on Irad. Deposit copies of every title are held by the National Library of Irad, the university's library. Availability shown is for the main library; most titles can be ordered from the TSU Press shop, main building, room 7.</p>
 <div class="cat-tools"><input id="pq" placeholder="Title, author or year" aria-label="Search the catalogue"><select id="pd" aria-label="Decade"><option value="">All years</option><option value="202">2020s</option><option value="201">2010s</option><option value="200">2000s</option><option value="199">1990s</option></select></div>
 <p class="muted" id="pcount">{len(press)} titles</p><ul class="cat-list" id="plist">{lis}</ul></div></div>"""
     write("library/press/index.html", page("TSU Press catalogue | National Library of Irad | Talas State University", body, base=b2, active="library/"))
@@ -779,8 +779,51 @@ def reader_page(m):
                description=f'Read {m["title"]} by {m["author"]} online, chapter by chapter, in the Digital Archive of the National Library of Irad.'))
 
 
+PRESS = json.loads((DATA / "press.json").read_text(encoding="utf-8"))
+
+
+def press_page(press):
+    b = "../"
+    latest = sorted(press, key=lambda x: -x["year"])[:8]
+    lat = "".join(f'<tr><th>{x["year"]}</th><td><i>{e(x["title"])}</i>' + (f'<br><span class="muted">{e(x["author"])}</span>' if x["author"] else "") + "</td></tr>" for x in latest)
+    main = f"""
+<p><b>Talas State University Press</b> (<i>Talas Mamlekettik Universitetinin Basmasy</i>) is the publishing house of Talas State University and the main publisher of scholarly work on Irad: history and archaeology, the Iradi language and literature, folklore and music, the Syro-Iradi Church, the natural history of the Talas Alatau and the steppe, and the society of the ISEZ. We publish 8 to 12 new titles a year in English, Iradi and Russian.</p>
+<h2 id="history">About the Press</h2>
+<p>The university print shop was opened in 1961 to print the <i>Bulletin</i> of Iradi State University. In 1993 it reprinted, from one of the copies that reached Talas, the sixth volume of Sagyn Jusupbekov's <i>Oral Folk Art of Irad</i>, impounded in Kobozev in 1991. The Academic Council founded the Press on the basis of the print shop in 1994. Our first title was Zheenbek Sadykov's <i>Genealogies of the Iradi Clans</i>. Since then the Press has published about 140 books, among them the <i>History of Irad in Three Volumes</i> (2012) and the complete 1938 text of <i>Janyl Baatyr</i> (2001).</p>
+<h2 id="series">Series</h2>
+<table>
+<tr><th>Iradica</th><td>Monographs on the history and culture of Irad.</td></tr>
+<tr><th>Library of Iradi Folklore<br><span class="muted">(Eldik Muras)</span></th><td>Epic, song and tale texts. The Latin-script edition of <i>Oral Folk Art of Irad</i>, vols. I–III (2008–2012), continues with vol. IV, <i>Shorter Epics and Historical Songs</i>, in 2027.</td></tr>
+<tr><th>Fauna and Flora of Irad</th><td>Checklists and surveys of the Department of Zoology and the Faculty of Biology.</td></tr>
+<tr><th>Monuments of Irad</th><td>Archaeological maps, surveys and excavation reports.</td></tr>
+<tr><th>Sources on the Syro-Iradi Church</th><td>Manuscript catalogues and studies, with the Cathedral Archives of Iyık Janyl.</td></tr>
+<tr><th>Survey Reports</th><td>Public opinion and social surveys of the Institute of Sociology, twice a year.</td></tr>
+</table>
+<p>The Press also prints the <a href="{b}research/#bulletin"><i>Bulletin of Talas State University</i></a>.</p>
+<h2 id="new">New titles</h2>
+<table>{lat}</table>
+<p><a class="btn btn-o" href="{b}library/press/">Full catalogue ({len(press)} titles)</a></p>
+<h2 id="forthcoming">Forthcoming</h2>
+<ul><li>Sagyn Jusupbekov (comp.). <i>Iradyn Eldik Oozeki Chygarmachylygy (Oral Folk Art of Irad)</i>, Latin-script edition, vol. IV: <i>Shorter Epics and Historical Songs</i>. 2027.</li>
+<li>Talas State University, Institute of Sociology. <i>Autumn 2026 Public Opinion Survey</i>. Spring 2027.</li></ul>
+<h2 id="authors">For authors</h2>
+<p>We consider manuscripts on Irad and Central Asia from scholars of the university and from outside it, including Iradi scholars abroad. Send a proposal of one or two pages with a contents list and a sample chapter to the editorial office. Each manuscript is read by two reviewers and approved by the Editorial Board, which meets four times a year. Manuscripts in English follow the <i>Chicago Manual of Style</i>; manuscripts in Iradi use the standard Latin orthography.</p>
+<p class="muted">Reports of the Institute of Sociology are reviewed by the Office of the Rector before release.</p>
+<h2 id="buy">Buying our books</h2>
+<p>The Press shop is in the main building, room 7 (Monday to Friday, 10:00–16:00). Prices are in som. Orders by e-mail can be collected at the shop. We are not able to send books outside Irad. Libraries abroad receive our titles through the international exchange of the <a href="{b}library/">National Library of Irad</a>.</p>
+<p>Every title carries a legal deposit number of the State Archives of Irad, and copies are deposited with the National Library.</p>
+<h2 id="contacts">Contacts</h2>
+<table><tr><th>Director</th><td>Dr Kalys Moldokmatov</td></tr><tr><th>Editor-in-chief</th><td>Dr Cholpon Asanalieva</td></tr>
+<tr><th>Editorial office</th><td>Main building, rooms 5–9 · +996-39-2-31-40-07 · publishing@talasuniversity.org</td></tr>
+<tr><th>Printing works</th><td>Main building, basement (entrance from the courtyard)</td></tr></table>"""
+    sub = ("TSU Press", [("About the Press", "press/#history"), ("Series", "press/#series"), ("New titles", "press/#new"), ("Catalogue", "library/press/"), ("For authors", "press/#authors"), ("Buying our books", "press/#buy"), ("Contacts", "press/#contacts")])
+    write("press/index.html", page("Talas State University Press | Talas State University", inner(b, [("Research", "research/"), ("TSU Press", None)], "Talas State University Press", main, sub), base=b, active="research/",
+          description="Talas State University Press, the main publisher of scholarly work on Irad since 1994: series, new titles, the catalogue, and information for authors."))
+
+
 def main():
     write("index.html", home())
+    press_page(PRESS)
     news_pages(); about_pages(); faculties_pages(); admission_pages(); research_page(); students_page(); contacts_page(); sitemap_page()
     press = json.loads((DATA / "press.json").read_text(encoding="utf-8"))
     library_pages(load_works(), press)
