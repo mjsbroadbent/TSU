@@ -6,8 +6,12 @@ Reads `pdftohtml -xml`, which keeps italics, bold, positions and font sizes:
 - the Contents page (a page whose heading is "Contents") gives the sections,
   their labels ("1".."12", "Coda" or none) and start pages;
 - running heads (top of page) and page numbers (bottom) are dropped;
+- the body size and margin are the commonest ones (16 pt in the large format, 14 in the pocket
+  format of the Ottuk Library reprints);
 - a line indented past the text margin starts a paragraph; a centred "⁂" is a
   scene break; other centred or right-aligned lines become centred/right blocks;
+- a smaller line starting "[" opens a translator's note block ("note"), which runs on
+  while the lines stay small; unindented paragraphs (a glossary) are split at a blank gap;
 - on each section's first page the big title and the spaced label are skipped,
   and the italic line under the title is kept as the section's subtitle.
 Check the result by eye.
@@ -98,16 +102,23 @@ def contents(pages):
     raise SystemExit("no Contents page")
 
 
-def body_margin(pages):
+def body_size(pages):
+    """The commonest font size of a line: the body text (16 in the large format, 14 in the pocket one)."""
     from collections import Counter
-    c = Counter(L["left"] for pg in pages for L in lines_of(pg) if L["size"] == 16)
+    return Counter(L["size"] for pg in pages for L in lines_of(pg)).most_common(1)[0][0]
+
+
+def body_margin(pages, body):
+    from collections import Counter
+    c = Counter(L["left"] for pg in pages for L in lines_of(pg) if L["size"] == body)
     return c.most_common(1)[0][0]
 
 
 def convert(pdf):
     pages = load(pdf)
     cpage, secs = contents(pages)
-    margin = body_margin(pages)
+    body = body_size(pages)
+    margin = body_margin(pages, body)
     last = pages[-1]["no"]
     for i, s in enumerate(secs):
         s["end"] = (secs[i + 1]["page"] - 1) if i + 1 < len(secs) else last - 1   # last page is the back cover
@@ -125,7 +136,9 @@ def convert(pdf):
             ls = lines_of(pg)
             if pg["no"] == s["page"]:
                 # drop the opening heading block: everything before the first body-size line
-                first = next((k for k, L in enumerate(ls) if L["size"] == 16 and L["left"] in (margin, margin + 20)), len(ls))
+                first = next((k for k, L in enumerate(ls) if L["size"] == body and margin <= L["left"] <= margin + 20), None)
+                if first is None:   # a page set smaller than the body (glossary): skip only the big title
+                    first = max((k + 1 for k, L in enumerate(ls) if L["size"] >= body * 1.25), default=0)
                 for L in ls[:first]:
                     if L["html"].startswith("<i>") and L["plain"] != s["title"]:
                         sub = re.sub(r"</?i>", "", L["html"])
@@ -135,8 +148,15 @@ def convert(pdf):
                 if L["plain"] in ("⁂", "***", "* * *"):
                     flush(); blocks.append(dict(k="brk")); continue
                 indent = L["left"] - margin
-                if L["size"] >= 20:
+                if L["size"] >= body * 1.25:
                     flush(); blocks.append(dict(k="h3", html=L["html"])); continue
+                # a translator's note set smaller than the body, in square brackets: its own block
+                if L["size"] < body and re.sub(r"</?i>", "", L["html"]).startswith("["):
+                    flush(); cur = dict(k="note", html=L["html"], _top=L["top"]); continue
+                if cur and cur["k"] == "note" and L["size"] < body and indent < 10:
+                    h = cur["html"]
+                    cur["html"] = (h + L["html"]) if h.endswith("-") else (h + " " + L["html"])
+                    cur["_top"] = L["top"]; continue
                 pw = pg["width"]
                 all_i = re.fullmatch(r"(<i>[^<]*</i>\s*)+", L["html"]) is not None
                 sym = abs((L["left"] - margin) - (pw - margin - L["right"])) <= 8 and indent >= 10
@@ -155,16 +175,20 @@ def convert(pdf):
                     else:
                         flush(); cur = dict(k=k, html=L["html"], _top=L["top"])
                     continue
-                if cur is None or cur["k"] != "p" or indent >= 10:
+                gap = cur is not None and L["top"] - cur["_top"] > L["size"] * 1.7   # unindented paragraphs set apart by space
+                if cur is not None and L["top"] < cur["_top"] and cur.get("_right", pw) < pw - margin - 40:
+                    gap = True   # new page, and the last line of the page before stopped short: that paragraph had ended
+                if cur is None or cur["k"] != "p" or indent >= 10 or gap:
                     flush(); cur = dict(k="p", html=L["html"], _top=L["top"])
                 else:
                     h = cur["html"]
                     cur["html"] = (h + L["html"]) if h.endswith("-") else (h + " " + L["html"])
                     cur["_top"] = L["top"]
+                cur["_right"] = L["right"]
         flush()
         for b in blocks:
-            b.pop("_top", None)
-            if b["k"] == "quote":
+            b.pop("_top", None); b.pop("_right", None)
+            if b["k"] in ("quote", "note"):
                 b["html"] = b["html"].replace("</i> <i>", " ").replace("</i><i>", "")
         out.append(dict(id=re.sub(r"[^a-z0-9]+", "-", s["title"].lower()).strip("-"), label=s["label"], title=s["title"],
                         subtitle=sub, page=s["page"], blocks=blocks))

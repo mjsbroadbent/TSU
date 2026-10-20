@@ -44,7 +44,7 @@ MENU = [
         ("Student e-portal", "students/#portal")]),
     ("Library", "library/", [
         ("National Library of Irad", "library/"), ("Digital archive", "library/archive/"),
-        ("TSU Press catalogue", "library/press/"), ("Opening hours and services", "library/#hours"),
+        ("TSU Press catalogue", "library/press/"), ("Ottuk Library deposit", "library/ottuk/"), ("Opening hours and services", "library/#hours"),
         ("Ethnography sound archive", "library/#sound"), ("Theses and dissertations", "library/#theses")]),
     ("Contacts", "contacts/", None),
 ]
@@ -253,6 +253,13 @@ FACULTIES = [
 ]
 
 NEWS = [
+    dict(slug="digital-archive-rider-from-kenkol", date="2026-10-19", img="img/news_ottuk.jpg", tag="Library",
+         title="Digital Archive adds “The Rider from Kenkol”, the first Ottuk Library western in English",
+         lead="Ormon Satarov's 1964 novel of a horse thief chased over the Kenkol Pass can now be read online, in Aidana Mukash kyzy's translation with the censored passages restored.",
+         body=["The National Library of Irad has added Ormon Satarov's <a href=\"../../library/archive/rider-from-kenkol/\"><i>The Rider from Kenkol</i></a> (<i>Kenkol Ashuusu</i>) to its Digital Archive. The novel, No. 7 of the Ottuk Library, was published in Iradi by the Irad State Publishing House in 1964. Aidana Mukash kyzy's English translation, published by Arsha Books in 2022, is the first book of the series to appear in English. It can be read online in the library's reader or downloaded as a PDF.",
+               "The Ottuk Library was a series of 41 pocket westerns in Iradi, published from 1962 to 1968 at 27 tyiyn a copy and read in villages and winter camps across the country. In 2019 a literary preservation grant from the National Library paid for the purchase of the series' catalogue from the liquidator of Talas Kitep, the successor of the State Publishing House, on condition that a copy of every surviving original edition be deposited with the library. The <a href=\"../../library/ottuk/\">Ottuk Library deposit</a> now holds the 1960s editions of 38 of the 41 titles, which readers may consult in the Rare books and manuscripts room.",
+               "The censor cut about a tenth of the 1964 edition. The translation restores the missing passages from the author's typescript, which survived among the Talas Kitep papers, and marks each one in a note. In the margin of the first of them a censor's pencil has written “Mysticism, cut”. Beneath it, in a different hand, is one word: “Pity.”",
+               "“These were the books the country read in winter,” said the head of the library's rare books department. “It is good that one of them can now be read anywhere.” Readers who have copies of the three titles still missing from the deposit are asked to write to library@talasuniversity.org."]),
     dict(slug="digital-archive-bazaar-chubar", date="2026-10-15", img="img/reading_room.jpg", tag="Library",
          title="Digital archive opens with Aikokul Tursunbek kyzy's “Twelve Kilometres”",
          lead="The National Library of Irad has opened its Digital Archive to readers, beginning with Aikokul Tursunbek kyzy's stories of the partition years.",
@@ -615,9 +622,11 @@ def library_pages(works, press):
 <p>Held jointly with the Department of Ethnography: about 6,000 hours of recordings of oral epic, horseback chants, laments and song made on expeditions since the 1950s, copied from tape to digital files since 2009. Listening by appointment in the Department of Ethnography, Building 2, room 31.</p>
 <h2 id="theses">Theses and dissertations</h2>
 <p>Every candidate's and doctoral dissertation defended at the university since 1961, and master's theses since 2005. Recent theses are being added to the <a href="{b}library/archive/">Digital archive</a> with the authors' consent.</p>
+<h2 id="special">Special collections</h2>
+<p><a href="{b}library/ottuk/"><b>The Ottuk Library deposit.</b></a> The 1960s Iradi editions of the Ottuk Library, the 41 pocket westerns of the Irad State Publishing House (1962–1968), deposited under the library's 2019 literary preservation grant. Copies of 38 titles survive; reading room only. The first of the series in English, <a href="{b}library/archive/rider-from-kenkol/"><i>The Rider from Kenkol</i></a>, is in the Digital Archive.</p>
 <h2 id="deposit">Deposit a work</h2>
 <p>The Digital Archive accepts long-form works on Irad by members of the university and, at the library's discretion, by other authors: fiction, memoirs, oral histories, theses, translations. Write to library@talasuniversity.org.</p>
-</div><div><nav class="card subnav"><h4>Library</h4><a href="{b}library/archive/">Digital archive</a><a href="{b}library/press/">TSU Press catalogue</a><a href="#hours">Opening hours</a><a href="#sound">Sound archive</a><a href="#theses">Theses</a><a href="#deposit">Deposit a work</a></nav></div></div></div>"""
+</div><div><nav class="card subnav"><h4>Library</h4><a href="{b}library/archive/">Digital archive</a><a href="{b}library/press/">TSU Press catalogue</a><a href="#hours">Opening hours</a><a href="#sound">Sound archive</a><a href="#theses">Theses</a><a href="{b}library/ottuk/">Ottuk Library deposit</a><a href="#deposit">Deposit a work</a></nav></div></div></div>"""
     write("library/index.html", page("National Library of Irad | Talas State University", body, base=b, active="library/"))
 
     # archive listing
@@ -635,6 +644,7 @@ def library_pages(works, press):
     for m in works:
         record_page(m)
         reader_page(m)
+    ottuk_page(works)
 
     # press catalogue
     lis = "".join(f'<li data-s="{e((x["title"] + " " + x["author"] + " " + str(x["year"])).lower())}"><span class="y">{x["year"]}</span><span class="t">{e(x["title"])}'
@@ -645,6 +655,52 @@ def library_pages(works, press):
 <div class="cat-tools"><input id="pq" placeholder="Title, author or year" aria-label="Search the catalogue"><select id="pd" aria-label="Decade"><option value="">All years</option><option value="202">2020s</option><option value="201">2010s</option><option value="200">2000s</option><option value="199">1990s</option></select></div>
 <p class="muted" id="pcount">{len(press)} titles</p><ul class="cat-list" id="plist">{lis}</ul></div></div>"""
     write("library/press/index.html", page("TSU Press catalogue | National Library of Irad | Talas State University", body, base=b2, active="library/"))
+
+
+OTTUK = [   # the titles of the deposit described so far; the deposit catalogue lists all 41
+    (2, "The Salt Road", "Туз жолу", "Tuz Jolu", "Ormon Satarov", 1962, ""),
+    (7, "The Rider from Kenkol", "Кенкол ашуусу", "Kenkol Ashuusu", "Ormon Satarov", 1964, "rider-from-kenkol"),
+    (11, "Six Graves at Aksay", "Аксайдагы алты мүрзө", "Aksaydagy Alty Mürzö", "K. Duishen", 1964, ""),
+    (19, "The Widow's Horse", "Жесирдин аты", "Jesirdin Aty", "Saltanat Kalchakeeva", 1965, "in translation"),
+    (26, "Winter on the Moiynkum", "Мойынкумдагы кыш", "Moiynkumdagy Kysh", "K. Duishen", 1966, ""),
+    (41, "The Last of the Ottuk", "Акыркы оттук", "Akyrky Ottuk", "Ormon Satarov", 1968, ""),
+]
+
+
+def ottuk_page(works):
+    b = "../../"
+    rider = next((m for m in works if m["slug"] == "rider-from-kenkol"), None)
+    rows = ""
+    for no, t, cyr, lat, au, yr, en in OTTUK:
+        if en and en != "in translation":
+            eng = f'Arsha Books, 2022 · <a href="{b}library/archive/{en}/read/">read online</a>'
+        elif en:
+            eng = "In translation (Arsha Books)"
+        else:
+            eng = '<span class="muted">Not yet translated</span>'
+        rows += (f'<tr><td>{no}</td><td><i>{e(t)}</i> ({yr})<br>{e(au)}<br><span class="muted">{e(cyr)} · <i>{e(lat)}</i></span></td>'
+                 f'<td>{eng}</td></tr>')
+    cov = (f'<a class="ottuk-cov" href="{b}library/archive/rider-from-kenkol/"><img src="{b}library/works/rider-from-kenkol/cover.jpg" alt="Cover of The Rider from Kenkol"></a>') if rider else ""
+    main = f"""
+<p class="tag">Special collection · Rare books and manuscripts</p>
+{cov}<p>The <b>Ottuk Library</b> (<i>Ottuk Kitepkanasy</i>) was a series of 41 pocket westerns in Iradi published by the Irad State Publishing House (<i>Irad Mamlekettik Basmasy</i>) from 1962 to 1968. An <i>ottuk</i> is the flint and steel a herder carries to light the night fire. Each book cost 27 tyiyn and ran to about 150 pages behind a painted cover: horses, mountain passes and the hard years from 1916 to 1925, from the Kenkol Pass to the Karatau, the Moiynkum and Aksay. The books were read in villages and winter camps. Print runs fell from 15,000 copies to 3,000, and the series closed with No. 41 in 1968.</p>
+<p>The writers were former cavalrymen, veterinary surgeons, schoolteachers and one woman agronomist, nearly all of them under pen names. Ormon Satarov, the pen name of a former cavalry scout who became a veterinary surgeon, wrote eleven of the 41 books, more than anyone else. The censor cut much of the books' folk colour: horse omens, the folk calendar, juniper smoke, a rider on a white horse who is never explained. Nurlan Sadikov's <i>Desert Sun's Rebellion</i> (1979), the film that founded the Iradi Western, owes a good deal to the series; Sadikov said that his young crew had grown up on the Ottuk books.</p>
+<h2 id="deposit">The deposit</h2>
+<p>The State Publishing House became Talas Kitep in 1992. When Talas Kitep went bankrupt in 2016, the rights to the series passed to its liquidator. In 2019 Arsha Books of Talas bought from the liquidator the rights to all 41 titles, together with about 200 unsold copies and the original cover paintings. The purchase was paid for by a <b>literary preservation grant from the National Library of Irad</b>; the grant bought the catalogue and nothing else. The grant had one condition: that a copy of every surviving original edition be deposited with the National Library, where anyone may ask to read it.</p>
+<p>Copies of <b>38 of the 41 titles</b> survived and were deposited in 2019 and 2020. Three titles have not yet been found in any copy. The deposit catalogue lists all 41 titles, with the pen names of their authors and, where they are known, the print runs.</p>
+<div class="note">If you have a copy of an Ottuk Library book, the library would be glad to hear from you, especially about the three missing titles: library@talasuniversity.org, tel. 2-31-40-50.</div>
+<h2 id="reading">Reading the originals</h2>
+<p>The 1960s editions are for the reading room only. They are not lent, and they are not scanned or photocopied, as the texts are in copyright. Ask for them in the Rare books and manuscripts room (library building, 14 University Street; Tuesday and Thursday, 10:00–16:00, by appointment). You will need a reader's card for the national collections, issued to any adult with an identity document. The deposit catalogue can be consulted at the same desk.</p>
+<p>English translations published by Arsha Books are held in the general collection as legal deposit copies. <a href="{b}library/archive/rider-from-kenkol/"><i>The Rider from Kenkol</i></a>, the first of the series in English, can be read online in the <a href="{b}library/archive/">Digital Archive</a>, with the passages cut by the censor in 1964 restored.</p>
+<h2 id="titles">Titles</h2>
+<p>The titles of the deposit described so far. The full list of 41 is in the deposit catalogue in the reading room.</p>
+<table class="ottuk"><tr><th>No.</th><th>Title, year of the Iradi edition and author</th><th>In English</th></tr>{rows}</table>
+<p class="muted">Author names are the names printed on the covers. Iradi titles are given as printed, in the Cyrillic script, and in the present Latin spelling.</p>"""
+    sub = ("Ottuk Library deposit", [("The series", "library/ottuk/"), ("The deposit", "library/ottuk/#deposit"), ("Reading the originals", "library/ottuk/#reading"),
+                                     ("Titles", "library/ottuk/#titles"), ("The Rider from Kenkol", "library/archive/rider-from-kenkol/"), ("National Library of Irad", "library/"), ("Digital archive", "library/archive/")])
+    write("library/ottuk/index.html", page("The Ottuk Library deposit | National Library of Irad | Talas State University",
+          inner(b, [("Library", "library/"), ("Special collections", "library/#special")], "The Ottuk Library deposit", main, sub), base=b, active="library/",
+          description="The Ottuk Library deposit of the National Library of Irad: the 1960s Iradi editions of the 41 pocket westerns of the Irad State Publishing House, 1962–1968."))
 
 
 def work_row(m, base):
@@ -660,8 +716,11 @@ def record_page(m):
         words = sum(len(re.sub("<[^>]+>", "", x.get("html", "")).split()) for sec in m["book"]["sections"] for x in sec["blocks"])
     else:
         words = len((m["dir"] / "text.md").read_text(encoding="utf-8").split())
-    rows = [("Title", e(m["title"]) + (f' (<i>{e(m["subtitle"])}</i>)' if m.get("subtitle") else "")), ("Author", e(m["author"]))]
+    rows = [("Title", e(m["title"]) + (f' (<i>{e(m["subtitle"])}</i>)' if m.get("subtitle") else "")),
+            ("Author", e(m["author"]) + (f' ({e(m["author_note"])})' if m.get("author_note") else ""))]
     if m.get("translator"): rows.append(("Translator", e(m["translator"])))
+    if m.get("series"):
+        rows.append(("Series", f'<a href="{b}{m["series_url"]}">{e(m["series"])}</a>' if m.get("series_url") else e(m["series"])))
     if m.get("part_of"): rows.append(("Part of", f'<i>{e(m["part_of"])}</i>' + (f', no. {m["part_no"]}' if m.get("part_no") else "")))
     if m.get("publisher"):
         pub = e(m["publisher"])
@@ -681,10 +740,11 @@ def record_page(m):
         contents = f'<h2>Contents</h2><ol class="contents">{items}</ol>'
     related = ""
     for r in m.get("related", []):
-        related += f'<div class="note"><a href="../{r["slug"]}/">{e(r["note"])}</a></div>'
+        href = f'{b}{r["href"]}' if r.get("href") else f'../{r["slug"]}/'
+        related += f'<div class="note"><a href="{href}">{e(r["note"])}</a></div>'
     main = f"""
 <div class="rec-head">{w_cover(m, b).replace('class="w-cover"', 'class="w-cover" style="font-size:16px"')}
-<div><p class="tag">{e(m["form"])} · {e(m["collection"])}</p><h2 style="margin:8px 0 4px;font-size:26px">{e(m["title"])}</h2>{f'<p style="margin:0;font-style:italic">{e(m["subtitle"])}</p>' if m.get("subtitle") else ""}<p style="margin:4px 0 14px;font-size:16px">{by_line(m, sub=False)}</p>
+<div><p class="tag">{e(m["form"])} · {e(m["collection"])}</p><h2 style="margin:8px 0 4px;font-size:26px">{e(m["title"])}</h2>{f'<p style="margin:0;font-style:italic">{e(m["subtitle"])}</p>' if m.get("subtitle") else ""}<p style="margin:4px 0 14px;font-size:16px">{by_line(m, sub=False)}</p>{f'<p class="muted" style="margin:-8px 0 14px">{e(m["series"])}</p>' if m.get("series") else ""}
 <p style="display:flex;gap:10px;flex-wrap:wrap"><a class="btn" href="read/">Read online</a><a class="btn btn-o" href="{b}library/works/{m["slug"]}/{m["pdf"]}" download>Download PDF ({pdf_kb} KB)</a></p></div></div>
 {related}
 <h2>Abstract</h2><p>{e(m["abstract"])}</p>
@@ -703,8 +763,12 @@ def render_blocks(blocks):
         k = x["k"]
         if k == "brk":
             out.append('<p class="brk" aria-hidden="true">⁂</p>')
+        elif k == "p" and re.match(r"<b>[^<]+</b>:", x["html"]):
+            out.append(f'<p class="gl">{x["html"]}</p>')
         elif k == "p":
             out.append(f'<p>{x["html"]}</p>')
+        elif k == "note":
+            out.append(f'<p class="tn">{x["html"]}</p>')
         elif k == "quote":
             out.append(f'<blockquote class="bq">{x["html"]}</blockquote>')
         elif k == "h3" or (k == "center" and "<" not in x["html"] and len(x["html"]) < 40):
@@ -733,7 +797,7 @@ def book_reader(m):
     items = "".join(f'<li><a href="{sec["id"]}/"><span class="lbl">{e(sec["label"])}</span>{e(sec["title"])}</a>' + (f'<small>{e(sec["subtitle"])}</small>' if sec["subtitle"] else "") + "</li>" for sec in secs)
     body = f"""<div class="progress"><i></i></div><div class="reader">{toc_nav(m, b, "", "../")}
 <div class="read-body"><article id="text"><header class="rt"><div class="au">{e(m["author"])}</div><h1>{e(m["title"])}</h1><div class="fr"><i>{e(m.get("subtitle", ""))}</i></div>
-<div class="fr" style="margin-top:18px">{e(m["form"])}</div>{f'<div class="fr"><i>Translated from the Iradi by {e(m["translator"])}</i></div>' if m.get("translator") else ""}<div class="fr" style="margin-top:18px">{e(m.get("publisher", ""))}</div></header>
+<div class="fr" style="margin-top:18px">{e(m["series"]) if m.get("series") else e(m["form"])}</div>{f'<div class="fr"><i>Translated from the Iradi by {e(m["translator"])}</i></div>' if m.get("translator") else ""}<div class="fr" style="margin-top:18px">{e(m.get("publisher", ""))}</div></header>
 {front}<h2 style="margin-top:50px">Contents</h2><ol class="contents">{items}</ol>
 <p class="end"><a class="btn" href="{secs[0]["id"]}/">Start reading &rarr;</a></p></article></div></div>"""
     write(f'library/archive/{m["slug"]}/read/index.html', page(f'{m["title"]}: read online | Talas State University', body, base=b, active="library/", body_class="reading",

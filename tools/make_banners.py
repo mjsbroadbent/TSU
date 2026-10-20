@@ -237,8 +237,23 @@ def news_pics():
         save(im, f"news_{n}.jpg", q=68)
 
 
+def news_ottuk():
+    """News picture for the Ottuk Library item: the Rider's cover on the archive stacks."""
+    c = cover(img("archive.jpg"), (1200, 700), (0.35, 0.5)).filter(ImageFilter.GaussianBlur(3))
+    c = Image.blend(c, Image.new("RGB", c.size, (20, 26, 34)), 0.35)
+    cov = Image.open(SRC / "rider_cover.jpg").convert("RGBA")
+    cov = cov.resize((round(cov.width * 560 / cov.height), 560), Image.LANCZOS)
+    sh = Image.new("RGBA", (cov.width + 80, cov.height + 80), (0, 0, 0, 0))
+    ImageDraw.Draw(sh).rectangle((40, 44, 40 + cov.width, 44 + cov.height), fill=(0, 0, 0, 170))
+    sh = sh.filter(ImageFilter.GaussianBlur(16))
+    sh.paste(cov, (30, 30), cov)
+    sh = sh.rotate(4, expand=True, resample=Image.BICUBIC)
+    c.paste(sh, ((c.width - sh.width) // 2 + 150, (c.height - sh.height) // 2), sh)
+    save(c, "news_ottuk.jpg", q=74)
+
+
 if __name__ == "__main__":
-    for fn in (banner_admission, banner_dorm, banner_evening, banner_archive, banner_mascot, magazines, news_pics):
+    for fn in (banner_admission, banner_dorm, banner_evening, banner_archive, banner_mascot, magazines, news_pics, news_ottuk):
         try:
             fn()
         except FileNotFoundError as ex:
