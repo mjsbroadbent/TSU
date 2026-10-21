@@ -102,6 +102,8 @@ def page(title, body, *, base, active="", who="", description="", body_class="",
 <link rel="stylesheet" href="{base}assets/tsu.css">
 <script>window.goatcounter=new Object();goatcounter.path=p=>location.host+p;</script>
 <script data-goatcounter="https://irad.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-QTS2XFLJD7"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments);}}gtag('js',new Date());gtag('config','G-QTS2XFLJD7');</script>
 </head>
 <body class="{body_class}" data-base="{base}">
 <header class="top">
