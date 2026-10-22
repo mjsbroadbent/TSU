@@ -431,7 +431,7 @@ def home():
     alum = (f'<section class="sec wrap"><div class="alum"><img class="bgimg" src="{b}img/graduation.jpg" alt=""><div><h2>Alumni<br>Talas State University</h2>'
             f'<p>Since 1958 the university has graduated more than 120,000 specialists: the teachers, doctors, lawyers and engineers of Irad, and the students who stood in Central Square in 1992. Join the alumni association, find your classmates and come back to lecture.</p>'
             f'<a class="btn" href="{b}about/#alumni">To the community &#8599;</a></div>'
-            f'<div class="alum-card"><div class="alum-ini">AK</div><b>Aiperi Kalysbekova</b><p>Computer science, class of 2013. “We wrote the first version in a dormitory room in Building 6. The department let us use the lab at night.”</p><a class="btn" href="{b}about/#alumni">Read more &#8599;</a></div></div></section>')
+            f'<div class="alum-card"><div class="alum-ini">AK</div><b>Aiperi Kalysbek</b><p>Computer science, class of 2013. “We wrote the first version in a dormitory room in Building 6. The department let us use the lab at night.”</p><a class="btn" href="{b}about/#alumni">Read more &#8599;</a></div></div></section>')
     useful = (f'<section class="sec wrap"><h2 class="sec-t bar-t">Useful links</h2><div class="useful">'
               + "".join(f'<div class="card"><div class="ill">{ICONS[i]}</div><a class="btn" href="{b}{h}">{e(t)} &#8599;</a></div>' for i, t, h in (("library", "National Library", "library/"), ("media", "Mass media", "news/"), ("people", "For employees", "contacts/#staff")))
               + "</div></section>")
