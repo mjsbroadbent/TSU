@@ -374,3 +374,17 @@ body.reading .progress { left: 0; }
 @media (max-width: 520px) { .ottuk-cov { width: 96px; margin-left: 14px; } }
 .read-body p:not(.gl):has(+ .gl) { margin-bottom: 18px; }
 .inner > div { min-width: 0; } .inner-main .cite, .rec td { overflow-wrap: anywhere; }
+
+/* online dictionary */
+.dict-az { display: flex; flex-wrap: wrap; gap: 4px; margin: 4px 0 12px; }
+.dict-az a { min-width: 26px; text-align: center; padding: 3px 5px; border: 1px solid var(--line); border-radius: 6px; font-size: 13px; text-decoration: none; }
+.dict-az a.on { background: var(--brand, #1d3f73); color: #fff; border-color: transparent; }
+.dict { margin: 0; }
+.dict dt { margin-top: 14px; font-size: 15px; }
+.dict dt b { font-family: var(--serif); font-size: 17px; }
+.dict dt .cy { color: var(--ink-3); margin-left: 4px; }
+.dict dt .pos { color: var(--ink-3); font-size: 13px; margin-left: 4px; }
+.dict dd { margin: 3px 0 0 0; padding-bottom: 10px; border-bottom: 1px solid var(--line); font-size: 14.5px; }
+.dict .org { color: var(--ink-3); font-size: 13px; }
+.dict .ex { font-size: 13.5px; }
+.dict-alpha { font-family: var(--serif); font-size: 20px; letter-spacing: .12em; word-spacing: .2em; }

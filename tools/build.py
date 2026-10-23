@@ -35,7 +35,7 @@ MENU = [
         ("National Library of Irad", "library/")]),
     ("Research", "research/", [
         ("Institutes and departments", "research/"), ("Bulletin of Talas State University", "research/#bulletin"),
-        ("Talas State University Press", "press/"), ("Institute of Sociology surveys", "research/#sociology"),
+        ("Talas State University Press", "press/"), ("Online dictionary of the Iradi language", "dictionary/"), ("Institute of Sociology surveys", "research/#sociology"),
         ("Rabat-i-Safed excavation", "research/#archaeology"), ("Glaciology and the Manas observatory", "research/#glaciology")]),
     ("Faculties", "faculties/", None),
     ("For students", "students/", [
@@ -44,7 +44,7 @@ MENU = [
         ("Student e-portal", "students/#portal")]),
     ("Library", "library/", [
         ("National Library of Irad", "library/"), ("Digital archive", "library/archive/"),
-        ("TSU Press catalogue", "library/press/"), ("Ottuk Library deposit", "library/ottuk/"), ("Opening hours and services", "library/#hours"),
+        ("TSU Press catalogue", "library/press/"), ("Iradi dictionary", "dictionary/"), ("Ottuk Library deposit", "library/ottuk/"), ("Opening hours and services", "library/#hours"),
         ("Ethnography sound archive", "library/#sound"), ("Theses and dissertations", "library/#theses")]),
     ("Contacts", "contacts/", None),
 ]
@@ -224,7 +224,7 @@ FACULTIES = [
          text="The faculty grew out of the department of history and philology with which the university opened in 1958. Its archaeologists run the university's excavation at the caravanserai of Rabat-i-Safed, and its archival studies programme trains staff for the ISEZ State Archive and the National Historical Museum."),
     dict(slug="philology", name="Faculty of Philology and Journalism", since=1958, dean="Assoc. Prof. Elnura Kadyrova",
          depts=["Iradi Language and Literature", "English Philology", "Russian Philology", "Journalism and Media"],
-         text="Teaching in Iradi, English and Russian. The department of Iradi language and literature compiled the <i>Descriptive Grammar of the Iradi Language</i> (2023) and edits the literature series of the <i>Bulletin</i>. Journalism students do placements at the <i>Talas Herald</i> and IradOne."),
+         text="Teaching in Iradi, English and Russian. The department of Iradi language and literature compiled the <i>Descriptive Grammar of the Iradi Language</i> (2023) and the <a href='../../dictionary/'>online dictionary of the Iradi language</a> (2026), and edits the literature series of the <i>Bulletin</i>. Journalism students do placements at the <i>Talas Herald</i> and IradOne."),
     dict(slug="arts", name="Faculty of Arts and Music", since=1994, dean="Prof. Kalys Ismailov",
          depts=["Iradi Traditional Music", "Performance and Composition", "Fine and Applied Arts"],
          text="Komuz, choor, kyl-kyiak and voice, alongside piano and composition. The faculty hosts the qualifying round of the national komuz contest each October and keeps a collection of instruments described in <i>Instruments of the Iradi Tradition</i> (TSU Press, 2010)."),
@@ -887,12 +887,114 @@ def press_page(press):
           description="Talas State University Press, the main publisher of scholarly work on Irad since 1994: series, new titles, the catalogue, and information for authors."))
 
 
+# ---------------------------------------------------------------- dictionary
+
+ALPHABET = "A Ä B C Ç D E F G H I İ J K L M N Ñ O Ö P Q R S Ş T U Ü V X Y Z".split()
+POS = {"n": "noun", "v": "verb", "adj": "adjective", "adv": "adverb", "pron": "pronoun", "num": "numeral", "postp": "postposition",
+       "conj": "conjunction", "interj": "interjection", "phrase": "phrase", "suffix": "suffix"}
+
+
+def dictionary_pages():
+    entries = json.loads((DATA / "dictionary.json").read_text(encoding="utf-8")) if (DATA / "dictionary.json").exists() else []
+    b = "../"
+    domains = sorted({d for x in entries for d in x.get("domain", [])})
+    letters = "".join(f'<a href="#" data-l="{l}">{l}</a>' for l in ALPHABET)
+    main = f"""
+<p class="tag">Faculty of Philology and Journalism · Department of Iradi Language and Literature</p>
+<p>The online dictionary of the Iradi language gives the meaning of Iradi words in English, with their spelling in the official alphabet, the press spelling where it differs, and the Cyrillic spelling of 1941–1992. The pilot edition of 2026 has <b>{len(entries):,}</b> entries, drawn from the department's card index of words in current use, place names and the language of the press, the church and oral literature. Russian equivalents and more entries are added each term.</p>
+<div class="cat-tools"><input id="dq" placeholder="Iradi or English word" aria-label="Search the dictionary" autocomplete="off"><select id="dd" aria-label="Subject"><option value="">All subjects</option>{''.join(f'<option value="{e(d)}">{e(d.capitalize())}</option>' for d in domains)}</select></div>
+<p class="dict-az" id="daz">{letters}<a href="#" data-l="">All</a></p>
+<p class="muted" id="dcount"></p>
+<dl class="dict" id="dlist"><dt class="muted">Loading…</dt></dl>
+<p><button class="btn btn-o" id="dmore" hidden>Show more</button></p>
+<noscript><p>The dictionary needs JavaScript. The entries are also available as <a href="{b}data/dictionary.json">data</a>.</p></noscript>
+<h2 id="using">Using the dictionary</h2>
+<p>Headwords are in the official alphabet of 1995–1997: nouns in the nominative singular, verbs as the bare stem with a hyphen (<i>ırda-</i> “to sing”), suffixes with a leading hyphen (<i>-ptır</i>). Newspapers, English-language documents and most personal names keep the older digraphs <i>ch</i>, <i>sh</i> and <i>ng</i>, and English-language texts often write <i>y</i> for <i>ı</i>; you can search in either spelling. The source language of a borrowed word is given after the meaning, and dialect and register labels after that. See the <a href="{b}dictionary/grammar/">notes on grammar and spelling</a>.</p>
+<h2 id="contact">Corrections and suggestions</h2>
+<p>Write to the department: iradi.dept@talasuniversity.org, or room 214, main building. The department's terminology commission reviews new terms twice a year.</p>"""
+    sub = ("Iradi dictionary", [("Search", "dictionary/"), ("Using the dictionary", "dictionary/#using"), ("Grammar and spelling", "dictionary/grammar/"),
+                                ("Faculty of Philology and Journalism", "faculties/philology/"), ("National Library of Irad", "library/")])
+    js = r"""<script>
+(function(){
+  var B=document.body.dataset.base, L=[], shown=0, PAGE=60, list=document.getElementById('dlist'), more=document.getElementById('dmore');
+  var q=document.getElementById('dq'), dd=document.getElementById('dd'), cnt=document.getElementById('dcount'), letter='';
+  var POS=""" + json.dumps(POS) + r""";
+  function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+  function fold(s){return String(s||'').toLowerCase().replace(/ç/g,'ch').replace(/ş/g,'sh').replace(/ñ/g,'ng').replace(/ı/g,'y').replace(/ö/g,'o').replace(/ü/g,'u').replace(/ä/g,'a').replace(/i̇/g,'i').replace(/x/g,'kh').replace(/zh/g,'j');}
+  function first(w){var c=w.replace(/^-/,'').charAt(0); return c==='i'?'İ':c==='ı'?'I':c.toLocaleUpperCase('tr');}
+  function item(x){
+    var h='<dt id="w-'+encodeURIComponent(x.w)+'"><b>'+esc(x.w)+'</b>'+(x.press?' <span class="muted">('+esc(x.press)+')</span>':'')+' <span class="cy">'+esc(x.cyr||'')+'</span> <i class="pos">'+esc(POS[x.pos]||x.pos||'')+'</i></dt>';
+    h+='<dd>'+esc(x.en)+(x.origin&&x.origin!=='Turkic'?' <span class="org">['+esc(x.origin)+']</span>':'')+(x.note?'<br><span class="muted">'+esc(x.note)+'</span>':'');
+    (x.ex||[]).forEach(function(e){h+='<br><span class="ex"><i>'+esc(e[0])+'</i> “'+esc(e[1])+'”</span>';});
+    return h+'</dd>';
+  }
+  function filtered(){
+    var t=fold(q.value.trim()), d=dd.value;
+    return L.filter(function(x){
+      if(d && (x.domain||[]).indexOf(d)<0) return false;
+      if(letter && first(x.w)!==letter) return false;
+      if(!t) return true;
+      return fold(x.w).indexOf(t)>=0 || fold(x.press).indexOf(t)>=0 || (x.cyr||'').toLowerCase().indexOf(q.value.trim().toLowerCase())>=0 || x.en.toLowerCase().indexOf(q.value.trim().toLowerCase())>=0;
+    });
+  }
+  var F=[];
+  function render(reset){
+    if(reset){F=filtered(); shown=0; list.innerHTML='';}
+    var part=F.slice(shown, shown+PAGE); shown+=part.length;
+    list.insertAdjacentHTML('beforeend', part.map(item).join(''));
+    if(!F.length) list.innerHTML='<dt class="muted">No entries found. Try the other spelling, or fewer letters.</dt>';
+    cnt.textContent=F.length===L.length?L.length.toLocaleString('en')+' entries':F.length.toLocaleString('en')+' of '+L.length.toLocaleString('en')+' entries';
+    more.hidden=shown>=F.length;
+  }
+  fetch(B+'data/dictionary.json').then(function(r){return r.json();}).then(function(d){
+    L=d; var m=location.search.match(/[?&]q=([^&]+)/); if(m) q.value=decodeURIComponent(m[1].replace(/\+/g,' ')); render(true);
+  }).catch(function(){list.innerHTML='<dt class="muted">The dictionary could not be loaded. Please try again later.</dt>';});
+  q.addEventListener('input',function(){render(true);}); dd.addEventListener('change',function(){render(true);});
+  more.addEventListener('click',function(){render(false);});
+  document.getElementById('daz').addEventListener('click',function(ev){var a=ev.target.closest('a'); if(!a) return; ev.preventDefault(); letter=a.dataset.l; [].forEach.call(this.querySelectorAll('a'),function(x){x.classList.toggle('on',x===a);}); render(true);});
+})();
+</script>"""
+    write("dictionary/index.html", page("Online dictionary of the Iradi language | Talas State University",
+          inner(b, [("Research", "research/"), ("Iradi dictionary", None)], "Online dictionary of the Iradi language", main, sub) + js, base=b, active="research/",
+          description="The online Iradi–English dictionary of Talas State University's Department of Iradi Language and Literature: official, press and Cyrillic spellings, meanings, origins and examples."))
+
+    b2 = "../../"
+    gmain = f"""
+<p>A short guide for readers of the dictionary, after the department's <i>Descriptive Grammar of the Iradi Language</i> (TSU Press, 2023).</p>
+<h2>The alphabet</h2>
+<p>Iradi has been written in the Latin alphabet since 1992. The 1995 Latin Orthography Revision gave it its present form of 32 letters, confirmed by the Language and Education Reform Act of 1997:</p>
+<p class="dict-alpha">{' '.join(ALPHABET)}</p>
+<ul><li>Dotless <i>ı</i> (capital <i>I</i>) is the back vowel of <i>kız</i> “girl”; dotted <i>i</i> (capital <i>İ</i>) is the vowel of <i>til</i> “language”.</li>
+<li><i>ç</i>, <i>ş</i> and <i>ñ</i> are the sounds the press writes <i>ch</i>, <i>sh</i> and <i>ng</i>; <i>j</i> is the sound of English <i>j</i>, pronounced as in French <i>jour</i> on the northern steppe.</li>
+<li><i>c</i> (/ts/), <i>f</i>, <i>h</i>, <i>v</i>, <i>x</i> and <i>ä</i> occur mainly in borrowed words; <i>q</i> only in a few established names.</li>
+<li>Long vowels are written double: <i>too</i> “mountain”, <i>jayloo</i> “summer pasture”.</li></ul>
+<h2>Vowel harmony</h2>
+<p>The vowels of endings follow the last vowel of the word in backness and rounding, and many endings change their first consonant after the word's last sound. The plural ending has eight forms: <i>at</i> “horse” → <i>attar</i>, <i>kol</i> “hand” → <i>koldor</i>, <i>üy</i> “house” → <i>üylör</i>, <i>kız</i> “girl” → <i>kızdar</i>, <i>eneler</i> “mothers”.</p>
+<h2>Nouns</h2>
+<table><tr><th>Case</th><th>Ending</th><th><i>at</i> “horse”</th></tr>
+<tr><td>Nominative</td><td>—</td><td><i>at</i></td></tr><tr><td>Genitive</td><td>-nın</td><td><i>attın</i> “of the horse”</td></tr>
+<tr><td>Dative</td><td>-ga</td><td><i>atka</i> “to the horse”</td></tr><tr><td>Accusative</td><td>-nı</td><td><i>attı</i> “the horse” (object)</td></tr>
+<tr><td>Locative</td><td>-da</td><td><i>atta</i> “on the horse”</td></tr><tr><td>Ablative</td><td>-dan</td><td><i>attan</i> “from the horse”</td></tr></table>
+<p>Possession is shown on the thing possessed: <i>atım</i> “my horse”, <i>atı</i> “his or her horse”, <i>attarıbız</i> “our horses”. Two nouns form a name with the possessive ending on the second: <i>Irad tili</i> “the Iradi language”, <i>çek ara ötkölü</i> “border crossing”.</p>
+<h2>Verbs</h2>
+<p>Verbs are listed as stems. Endings follow in a fixed order: negation <i>-ba-</i>, tense, person. <i>Men atka mindim</i> “I mounted the horse”; <i>Atam Talasta jaşayt</i> “My father lives in Talas”; <i>Irad satılbayt</i> “Irad is not for sale”. The past in <i>-dı</i> reports what the speaker saw or knows; the past in <i>-gan</i> what was heard or inferred; the highland and epic past in <i>-ptır</i> what is told.</p>
+<h2>Making words</h2>
+<p>New words are formed with suffixes: <i>-çı</i> for a person's trade (<i>eerçi</i> “saddler”), <i>-lık</i> for qualities and fields (<i>azatlık</i> “freedom”, <i>eerçilik</i> “saddlery”), <i>-kana</i> for places (<i>dariykana</i> “pharmacy”, <i>oorukana</i> “hospital”), <i>-ça</i> for a manner or language (<i>Iradça</i>).</p>
+<h2>Dialects</h2>
+<p>The standard follows the speech of the middle Talas valley. Dialect labels in the dictionary: <b>Nurzhan</b> (urban speech with Russian words, <i>Russoça</i>), <b>highland</b> (Talas Alatau and Chatkal), <b>steppe</b> and <b>Karatau</b>, <b>Fergana Rim</b>, <b>church</b> (the liturgical register) and <b>Keñsuu</b> (an extinct dialect of the Keñ-Suu valley).</p>"""
+    gsub = ("Iradi dictionary", [("Search", "dictionary/"), ("Grammar and spelling", "dictionary/grammar/"), ("Faculty of Philology and Journalism", "faculties/philology/")])
+    write("dictionary/grammar/index.html", page("Grammar and spelling | Online dictionary of the Iradi language | Talas State University",
+          inner(b2, [("Research", "research/"), ("Iradi dictionary", "dictionary/"), ("Grammar and spelling", None)], "Notes on Iradi grammar and spelling", gmain, gsub), base=b2, active="research/",
+          description="A short guide to the Iradi alphabet, vowel harmony, nouns, verbs, word formation and dialects, for readers of TSU's online Iradi dictionary."))
+
+
 def main():
     write("index.html", home())
     press_page(PRESS)
     news_pages(); about_pages(); faculties_pages(); admission_pages(); research_page(); students_page(); contacts_page(); sitemap_page()
     press = json.loads((DATA / "press.json").read_text(encoding="utf-8"))
     library_pages(load_works(), press)
+    dictionary_pages()
     write("404.html", page("Page not found | Talas State University", '<div class="wrap" style="padding:60px 28px"><h1 class="page-h">Page not found</h1><p>The page may have moved after the site update of 2024. <a href="https://talasuniversity.org/">Go to main page</a></p></div>', base="https://talasuniversity.org/"))
     (ROOT / "sitemap.xml").write_text('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
                                       + "".join(f"  <url><loc>{u}</loc></url>\n" for u in SITEMAP) + "</urlset>\n", encoding="utf-8")
