@@ -122,7 +122,7 @@ def page(title, body, *, base, active="", who="", description="", body_class="",
   <ul class="who">{who_links}</ul>
   <div class="side-foot">
     <a class="side-logo" href="{base}"><img src="{base}assets/seal.svg" alt=""><b>Talas State<br>University</b></a>
-    <div class="soc"><a class="tp" href="https://tulparapp.com/" title="TSU on Tulpar" rel="noopener">T</a><a href="https://iradone.com/" title="TSU on IradOne" rel="noopener">1</a><a href="mailto:info@talasuniversity.org" title="E-mail">@</a></div>
+    <div class="soc"><a class="tp" href="https://tulparapp.com/app/#sub=tsu" title="TSU on Tulpar: @tsu" aria-label="TSU on Tulpar" rel="noopener"><img src="{base}assets/tulpar.svg" alt="" width="24" height="24"></a><a href="https://iradone.com/" title="TSU on IradOne" rel="noopener">1</a><a href="mailto:info@talasuniversity.org" title="E-mail">@</a></div>
     <ul class="side-links">
       <li><a href="{base}about/">Talas State University</a></li>
       <li><a href="{base}sitemap/">Map of the site</a></li>
@@ -141,7 +141,7 @@ def page(title, body, *, base, active="", who="", description="", body_class="",
 {body}
 <footer class="foot">
   <div class="wrap">
-    <div><h4>Talas State University</h4><p>Talas Mamlekettik Universiteti<br>12 University Street, Talas 724000, Irad<br>Admissions Office: +996-39-2-31-40-11<br>Rector's reception: +996-39-2-31-40-00<br>info@talasuniversity.org</p></div>
+    <div><h4>Talas State University</h4><p>Talas Mamlekettik Universiteti<br>12 University Street, Talas 724000, Irad<br>Admissions Office: +996-39-2-31-40-11<br>Rector's reception: +996-39-2-31-40-00<br>info@talasuniversity.org</p><p class="foot-tp"><a href="https://tulparapp.com/app/#sub=tsu" rel="noopener"><img src="{base}assets/tulpar.svg" alt="" width="18" height="18">@tsu on Tulpar</a></p></div>
     <div><h4>Study</h4><ul><li><a href="{base}admission/">Admission</a></li><li><a href="{base}faculties/">Faculties</a></li><li><a href="{base}admission/evening/">Evening courses</a></li><li><a href="{base}students/">For students</a></li></ul></div>
     <div><h4>Science</h4><ul><li><a href="{base}research/">Research</a></li><li><a href="{base}library/">National Library</a></li><li><a href="{base}library/archive/">Digital archive</a></li><li><a href="{base}press/">TSU Press</a></li></ul></div>
     <div><h4>University</h4><ul><li><a href="{base}about/">About us</a></li><li><a href="{base}about/rector/">Rector</a></li><li><a href="{base}news/">News</a></li><li><a href="{base}contacts/">Contacts</a></li></ul></div>
